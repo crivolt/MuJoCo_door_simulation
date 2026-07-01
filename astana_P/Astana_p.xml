@@ -1,0 +1,114 @@
+
+<mujoco model="Test_astana_p_con_panda">
+
+    <option timestep="0.002" gravity="0 0 -9.81"/>
+
+    <include file="universal_robots_ur10e/ur10e.xml"/>
+
+    <asset>
+        <mesh name="frigo_mesh" file="astana_P_corpo.obj"/>
+        <mesh name="porta_sx_mesh" file="astana_P_portasx.obj"/>
+        <mesh name="porta_dx_mesh" file="astana_P_portadx.obj"/>
+    </asset>
+
+    <worldbody>
+        <geom name="pavimento" type="plane" size="5 5 0.1" rgba="0.8 0.9 0.8 1"/>
+        <light directional="true" diffuse="0.8 0.8 0.8" specular="0.2 0.2 0.2" pos="0 0 5" dir="0 0 -1" castshadow="false"/>
+
+        <body name="banco_frigo" pos="-0.75 0.3 0">
+            
+            <geom type="mesh" mesh="frigo_mesh" rgba="0.6 0.6 0.6 1" contype="0" conaffinity="0"/>
+            
+            <body name="porta_sx" pos="0 0 0">
+                <joint name="giunto_porta_sx" type="hinge" pos="0.75 0.14 0" axis="0 0 1" range="0 1.65806" limited="true" damping="2.0" frictionloss="1.86" stiffness="0" springref="0"/>
+                <inertial pos="0.18 0 0.6" mass="1.5" diaginertia="0.054 0.054 0.0108"/>
+                <geom type="mesh" mesh="porta_sx_mesh" rgba="0.3 0.8 0.9 0.4" contype="0" conaffinity="0"/> 
+                <site name="debug_cernierasx" pos="0.75 0.14 0" size="0.03" rgba="0 1 0 1"/>
+                <body name="maniglia_sx" pos="0.07 0.1 1.0">
+                    <inertial pos="0 0 0" mass="0.2" diaginertia="0.001 0.001 0.001"/>
+                    <geom name="manigliasx" type="cylinder" size="0.015 0.15" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+                    <site name="target_manigliasx" pos="0 0 0" size="0.02" rgba="1 0 0 0.5"/>
+                </body>
+            </body>
+
+            <body name="porta_dx" pos="0 0 0">
+                <joint name="giunto_porta_dx" type="hinge" pos="1.55 0.14 0" axis="0 0 1" range="0 1.65806" limited="true" damping="2.0" frictionloss="1.86" stiffness="0" springref="0"/>
+                <inertial pos="0.18 0 0.6" mass="1.5" diaginertia="0.054 0.054 0.0108"/>
+                <geom type="mesh" mesh="porta_dx_mesh" rgba="0.3 0.8 0.9 0.4" contype="0" conaffinity="0"/>
+                <site name="debug_cernieradx" pos="1.55 0.14 0" size="0.03" rgba="0 1 0 1"/>
+                <body name="maniglia_dx" pos="0.85 0.1 1.0">
+                    <inertial pos="0 0 0" mass="0.2" diaginertia="0.001 0.001 0.001"/>
+                    <geom name="manigliadx" type="cylinder" size="0.015 0.15" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+                    <site name="target_manigliadx" pos="0 0 0" size="0.02" rgba="1 0 0 0.5"/>
+                </body>
+            </body>
+
+        </body>
+    </worldbody>
+
+    <equality>
+        <weld name="presa_sx" site1="attachment_site" site2="target_manigliasx" active="false" solimp="0.8 0.9 0.01" solref="0.04 1"/>
+        <weld name="presa_dx" site1="attachment_site" site2="target_manigliadx" active="false" solimp="0.8 0.9 0.01" solref="0.04 1"/>
+    </equality>
+
+</mujoco>
+
+<!--
+<mujoco model="Test_astana_p_con_panda">
+    <compiler angle="degree" />
+
+    <option timestep="0.002" gravity="0 0 -9.81"/>
+
+    <include file="franka_emika_panda/panda.xml"/>
+
+    <asset>
+        <mesh name="frigo_mesh" file="astana_P_corpo.obj" scale="0.6 0.6 0.6"/>
+        <mesh name="porta_sx_mesh" file="astana_P_portasx.obj" scale="0.6 0.6 0.6"/>
+        <mesh name="porta_dx_mesh" file="astana_P_portadx.obj" scale="0.6 0.6 0.6"/>
+    </asset>
+
+    <worldbody>
+        <geom name="pavimento" type="plane" size="5 5 0.1" rgba="0.8 0.9 0.8 1"/>
+        <light directional="true" diffuse="0.8 0.8 0.8" specular="0.2 0.2 0.2" pos="0 0 5" dir="0 0 -1" castshadow="false"/>
+
+        <body name="banco_frigo" pos="-0.5 0.5 0">
+            
+            <geom type="mesh" mesh="frigo_mesh" rgba="0.6 0.6 0.6 1" contype="0" conaffinity="0"/>
+            
+            <body name="porta_sx" pos="0 0 0">
+                <joint name="giunto_porta_sx" type="hinge" pos="0.45 0.09 0" axis="0 0 1" range="0 1.65806" limited="true" damping="0.05"/>
+                <inertial pos="0.18 0 0.6" mass="1.5" diaginertia="0.054 0.054 0.0108"/>
+                <geom type="mesh" mesh="porta_sx_mesh" rgba="0.3 0.8 0.9 0.4" contype="0" conaffinity="0"/> 
+                <site name="debug_cernierasx" pos="0.45 0.09 0" size="0.03" rgba="0 1 0 1"/>
+
+                <body name="maniglia_sx" pos="0.05 0.05 0.65">
+                    <inertial pos="0 0 0" mass="0.2" diaginertia="0.001 0.001 0.001"/>
+                    <geom name="manigliasx" type="cylinder" size="0.015 0.15" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+                    <site name="target_manigliasx" pos="0 0 0" size="0.02" rgba="1 0 0 0.5"/>
+                </body>
+            </body>
+
+            <body name="porta_dx" pos="0 0 0">
+                <joint name="giunto_porta_dx" type="hinge" pos="0.93 0.09 0" axis="0 0 1" range="0 1.65806" limited="true" damping="0.05"/>
+                <inertial pos="0.18 0 0.6" mass="1.5" diaginertia="0.054 0.054 0.0108"/>
+                <geom type="mesh" mesh="porta_dx_mesh" rgba="0.3 0.8 0.9 0.4" contype="0" conaffinity="0"/>
+                <site name="debug_cernieradx" pos="0.93 0.09 0" size="0.03" rgba="0 1 0 1"/>
+
+                <body name="maniglia_dx" pos="0.53 0.05 0.65">
+                    <inertial pos="0 0 0" mass="0.2" diaginertia="0.001 0.001 0.001"/>
+                    <geom name="manigliadx" type="cylinder" size="0.015 0.15" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+                    <site name="target_manigliadx" pos="0 0 0" size="0.02" rgba="1 0 0 0.5"/>
+                </body>
+            </body>
+
+        </body>
+    </worldbody>
+
+    <equality>
+        <weld name="presa_sx" site1="grasp_site" site2="target_manigliasx" active="false" solimp="0.8 0.9 0.01" solref="0.04 1"/>
+        <weld name="presa_dx" site1="grasp_site" site2="target_manigliadx" active="false" solimp="0.8 0.9 0.01" solref="0.04 1"/>
+    </equality>
+
+</mujoco>
+-->
+

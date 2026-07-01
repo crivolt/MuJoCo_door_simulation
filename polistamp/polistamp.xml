@@ -1,0 +1,40 @@
+<mujoco model="Test_polistamp">
+
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+
+  <include file="universal_robots_ur10e/ur10e.xml"/>
+
+  <asset>
+    <mesh name="frigo_mesh" file="corpo.obj"/>
+    <mesh name="porta_mesh" file="porta.obj"/>
+    <mesh name="maniglia_mesh" file="maniglia.obj"/>
+  </asset>
+
+
+  <worldbody>
+    <geom name="pavimento" type="plane" size="5 5 0.1" rgba="0.8 0.9 0.8 1"/>
+    <light directional="true" diffuse="0.8 0.8 0.8" specular="0.2 0.2 0.2" pos="0 0 5" dir="0 0 -1" castshadow="false"/>
+
+    <body name="banco_frigo" pos="-1.7 0.5 0">
+      <geom type="mesh" mesh="frigo_mesh" rgba="0.6 0.6 0.6 1" contype="0" conaffinity="0"/>
+
+      <body name="porta" pos="0 0 0">
+        <joint name="giunto_porta" type="hinge" pos="1.55 0.03 0" axis="0 0 1" range="0 2.967" limited="true"  damping="2.0" frictionloss="11.942" stiffness="0" springref="0"/>
+        <inertial pos="0.75 0.0 1.05" mass="9" diaginertia="1.92 1.92 0.15"/>
+        <geom type="mesh" mesh="porta_mesh" rgba="0.6 0.6 0.6 0.8" contype="1" conaffinity="1"/>
+
+        <body name="maniglia" pos="0 0 0">
+            <joint name="giunto_maniglia" type="hinge" pos="0.75 -0.02 0" axis="0 0 1" range="-0.174 0" limited="true" damping="0.5" frictionloss="0.5" stiffness="0" springref="0"/>
+            <inertial pos="0.82 -0.02 0" mass="1.0" diaginertia="0.0002 0.0034 0.0034"/>
+            <geom type="mesh" mesh="maniglia_mesh" rgba="0.8 0.2 0.2 1" contype="1" conaffinity="1"/>
+            <site name="target_maniglia" pos="0.9 -0.02 1.05" size="0.02" rgba="1 0 0 0.5"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+<equality>
+    <weld name="presa" site1="attachment_site" site2="target_maniglia" active="false" solimp="0.9 0.95 0.001 0.5 2" solref="0.15 1"/>
+</equality>
+
+</mujoco>

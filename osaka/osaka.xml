@@ -1,0 +1,107 @@
+
+<mujoco model="Test_osaka">
+    <compiler angle="degree"/>
+
+    <option timestep="0.002" gravity="0 0 -9.81"/>
+
+    <include file="franka_emika_panda/panda.xml"/>
+
+    <asset>
+        <mesh name="frigo_mesh" file="osaka_corpo.obj"/>
+        <mesh name="porta_sx_mesh" file="osaka_portasx.obj"/>
+        <mesh name="porta_dx_mesh" file="osaka_portadx.obj"/>
+    </asset>
+
+    <worldbody>
+        <geom name="pavimento" type="plane" size="5 5 0.1" rgba="0.8 0.9 0.8 1"/>
+        <light directional="true" diffuse="0.8 0.8 0.8" specular="0.2 0.2 0.2" pos="0 0 5" dir="0 0 -1" castshadow="false"/>
+        
+
+        <body name="banco_frigo" pos="-1.4 0.3 0">
+            
+            <geom type="mesh" mesh="frigo_mesh" rgba="0.6 0.6 0.6 1" contype="0" conaffinity="0"/>
+            
+            <body name="porta_sx" pos="0 0 0">
+                <joint name="slide_sx" type="slide" axis="1 0 0" range="0 0.8" limited="true" damping="0.05"/>
+                <inertial pos="0.18 0 0.6" mass="1.5" diaginertia="0.054 0.054 0.0108"/>
+                <geom type="mesh" mesh="porta_sx_mesh" pos="0 0 0" rgba="0.3 0.8 0.9 0.4" euler="0 0 0" contype="0" conaffinity="0"/>
+                <body name="maniglia_sx" pos="0.1 0.13 0.5" euler="2.8 0 0">
+                    <geom name="manigliasx" type="cylinder" size="0.015 0.15" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+                    <site name="target_manigliasx" pos="0 0 0" size="0.02" rgba="1 0 0 0.5"/>
+                </body>
+	    </body>
+
+            <body name="porta_dx" pos="0 0 0">
+                <joint name="slide_dx" type="slide" axis="-1 0 0" range="0 0.8" limited="true" damping="0.05"/>
+                <geom type="mesh" mesh="porta_dx_mesh" pos="0 0 0" rgba="0.3 0.8 0.9 0.4" euler="0 0 0" contype="0" conaffinity="0"/>
+                <body name="maniglia_dx" pos="1.87 0.1 0.5" euler="2.8 0 0">
+                    <geom name="manigliadx" type="cylinder" size="0.015 0.15" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+                    <site name="target_manigliadx" pos="0 0 0" size="0.02" rgba="1 0 0 0.5"/>
+                </body>
+            </body>
+
+        </body>
+    </worldbody>
+
+    <equality>
+        <weld name="presa_sx" site1="grasp_site" site2="target_manigliasx" active="false" solimp="0.8 0.9 0.01" solref="0.04 1"/>
+        <weld name="presa_dx" site1="grasp_site" site2="target_manigliadx" active="false" solimp="0.8 0.9 0.01" solref="0.04 1"/>
+    </equality>
+    
+</mujoco>
+
+<!--
+<mujoco model="Test_osaka">
+    <compiler angle="degree"/>
+
+    <option timestep="0.002" gravity="0 0 -9.81"/>
+
+    <include file="franka_emika_panda/panda.xml"/>
+
+    <asset>
+        <mesh name="frigo_mesh" file="osaka_corpo.obj" scale="0.5 0.5 0.5"/>
+        <mesh name="porta_sx_mesh" file="osaka_portasx.obj" scale="0.5 0.5 0.5"/>
+        <mesh name="porta_dx_mesh" file="osaka_portadx.obj" scale="0.5 0.5 0.5"/>
+    </asset>
+
+    <worldbody>
+        <geom name="pavimento" type="plane" size="5 5 0.1" rgba="0.8 0.9 0.8 1"/>
+        <light directional="true" diffuse="0.8 0.8 0.8" specular="0.2 0.2 0.2" pos="0 0 5" dir="0 0 -1" castshadow="false"/>
+
+        <body name="banco_frigo" pos="-0.5 0.7 0">
+            
+            <geom type="mesh" mesh="frigo_mesh" rgba="0.6 0.6 0.6 1" contype="0" conaffinity="0"/>
+            
+            <body name="porta_sx" pos="0 0 0">
+                <joint name="slide_sx" type="slide" axis="1 0 0" range="0 0.4" limited="true" damping="0.05"/>
+                <inertial pos="0.18 0 0.6" mass="1.5" diaginertia="0.054 0.054 0.0108"/>
+                <geom type="mesh" mesh="porta_sx_mesh" pos="0 0 0" rgba="0.3 0.8 0.9 0.4" contype="0" conaffinity="0"/>
+
+                <body name="maniglia_sx" pos="0.05 0.065 0.25" euler="2.8 0 0">
+                    <inertial pos="0 0 0" mass="0.2" diaginertia="0.001 0.001 0.001"/>
+                    <geom name="manigliasx" type="cylinder" size="0.015 0.07" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+                    <site name="target_manigliasx" pos="0 0 0" size="0.02" rgba="1 0 0 0.5"/>
+                </body>
+	    </body>
+
+            <body name="porta_dx" pos="0 0 0">
+                <joint name="slide_dx" type="slide" axis="-1 0 0" range="0 0.4" limited="true" damping="0.05"/>
+                <inertial pos="0.18 0 0.6" mass="1.5" diaginertia="0.054 0.054 0.0108"/>
+                <geom type="mesh" mesh="porta_dx_mesh" pos="0 0 0" rgba="0.3 0.8 0.9 0.4" contype="0" conaffinity="0"/>
+
+                <body name="maniglia_dx" pos="0.935 0.05 0.25" euler="2.8 0 0">
+                    <geom name="manigliadx" type="cylinder" size="0.015 0.07" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+                    <site name="target_manigliadx" pos="0 0 0" size="0.02" rgba="1 0 0 0.5"/>
+                </body>
+            </body>
+
+        </body>
+    </worldbody>
+
+    <equality>
+        <weld name="presa_sx" site1="grasp_site" site2="target_manigliasx" active="false" solimp="0.8 0.9 0.01" solref="0.04 1"/>
+        <weld name="presa_dx" site1="grasp_site" site2="target_manigliadx" active="false" solimp="0.8 0.9 0.01" solref="0.04 1"/>
+    </equality>
+    
+</mujoco>
+-->
