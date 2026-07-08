@@ -1,0 +1,75 @@
+<mujoco model="Test_efficold_pneumatic_cylinder">
+
+  <compiler angle="radian"/>
+
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+
+  <asset>
+    <mesh name="frigo_mesh" file="efficold_corpo.obj"/>
+    <mesh name="porta_mesh" file="efficold_porta.obj"/>
+  </asset>
+
+  <worldbody>
+    <geom name="pavimento" type="plane" size="5 5 0.1" rgba="0.8 0.9 0.8 1"/>
+    <light directional="true" diffuse="0.8 0.8 0.8" specular="0.2 0.2 0.2" pos="0 0 5" dir="0 0 -1" castshadow="false"/>
+
+    <body name="supporto_pneumatico" pos="-0.2 0.15 0.00">
+        <geom name="supporto_base" type="sphere" size="0.035" rgba="0.1 0.1 0.1 1" contype="0" conaffinity="0"/>
+        <site name="snodo_fisso_cilindro" pos="0 0 0" size="0.025" rgba="1 0 0 1"/>
+
+        <body name="canna_cilindro" pos="0 0 0" zaxis="0 0.24 0.85">
+            <joint name="snodo_base_cilindro" type="ball" damping="0.05"/>
+            <inertial pos="0 0 0.35" mass="0.8" diaginertia="0.014 0.014 0.0025"/>
+            <geom name="canna_visual" type="cylinder" pos="0 0 0.38" size="0.025 0.38" rgba="0.15 0.15 0.15 1" contype="0" conaffinity="0"/>
+
+            <body name="stelo_cilindro" pos="0 0 0">
+            <joint name="corsa_cilindro" type="slide" axis="0 0 1" range="0 0.50" limited="true" damping="20" frictionloss="5"/>
+            <inertial pos="0 0 0.41" mass="0.35" diaginertia="0.006 0.006 0.001"/>
+
+            <!-- geom leggermente allungato per coprire il nuovo punto di aggancio a 0.786 -->
+            <geom name="stelo_visual" type="cylinder" pos="0 0 0.39" size="0.012 0.41" rgba="0.85 0.85 0.85 1" contype="0" conaffinity="0"/>
+
+            <!-- CORRETTO: da 0.71 a 0.786 -> a corsa_cilindro=0 coincide esattamente con target_maniglia
+                 (distanza base->maniglia verificata numericamente = 0.7863 m) -->
+            <site name="punta_stelo" pos="0 0 0.786" size="0.025" rgba="0 1 0 1"/>
+            <geom name="snodo_mobile_visual" type="sphere" pos="0 0 0.786" size="0.025" rgba="0 1 0 1" contype="0" conaffinity="0"/>
+            </body>
+        </body>
+    </body>
+
+    <!-- Banco frigo Efficold: struttura invariata -->
+    <body name="banco_frigo" pos="-0.5 0.4 0">
+      <geom type="mesh" mesh="frigo_mesh" rgba="0.6 0.6 0.6 1" contype="0" conaffinity="0"/>
+
+      <body name="porta" pos="0 0 0">
+        <joint name="giunto_porta" type="hinge" pos="-0.2 0.475 0.8" axis="1 0 0" range="-2.0944 0" limited="true" damping="2.0" frictionloss="1.86" stiffness="0" springref="0"/>
+        <inertial pos="0.15 0.475 0.525" mass="9" diaginertia="0.23 0.23 0.23"/>
+        <geom type="mesh" mesh="porta_mesh" rgba="0.6 0.6 0.6 0.8" contype="0" conaffinity="0"/>
+
+        <body name="maniglia_body" pos="0.3 -0.014 0.75" euler="0 1.57 0">
+          <geom name="maniglia" type="cylinder" size="0.015 0.15" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+          <site name="target_maniglia" pos="0 0 0" size="0.025" rgba="1 0 0 0.5"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <equality>
+    <connect name="snodo_stelo_maniglia" site1="punta_stelo" site2="target_maniglia" solimp="0.9 0.95 0.001" solref="0.02 1"/>
+  </equality>
+
+  <actuator>
+    <motor name="forza_pneumatica" joint="corsa_cilindro" gear="1" ctrllimited="true" ctrlrange="-700 700"/>
+  </actuator>
+
+  <!-- Sensori -->
+  <sensor>
+    <jointpos name="angolo_porta" joint="giunto_porta"/>
+    <jointvel name="velocita_porta" joint="giunto_porta"/>
+    <jointpos name="estensione_cilindro" joint="corsa_cilindro"/>
+    <jointvel name="velocita_stelo" joint="corsa_cilindro"/>
+    <framepos name="posizione_punta_stelo" objtype="site" objname="punta_stelo"/>
+    <framepos name="posizione_maniglia" objtype="site" objname="target_maniglia"/>
+  </sensor>
+
+</mujoco>

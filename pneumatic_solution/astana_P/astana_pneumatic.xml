@@ -1,0 +1,117 @@
+<mujoco model="Test_astana_p_pneumatic_cylinders">
+
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+  <compiler angle="radian"/>
+
+  <asset>
+    <!-- Frigo -->
+    <mesh name="frigo_mesh" file="astana_P_corpo.obj"/>
+    <mesh name="porta_sx_mesh" file="astana_P_portasx.obj"/>
+    <mesh name="porta_dx_mesh" file="astana_P_portadx.obj"/>
+  </asset>
+
+  <worldbody>
+    <geom name="pavimento" type="plane" size="5 5 0.1" rgba="0.8 0.9 0.8 1"/>
+    <light directional="true" diffuse="0.8 0.8 0.8" specular="0.2 0.2 0.2" pos="0 0 5" dir="0 0 -1" castshadow="false"/>
+    <light name="top" pos="0 0 2" mode="trackcom"/>
+
+    <!-- Pneumatico porta sinistra -->
+    <body name="supporto_pneumatico_sx" pos="-0.10 -1.05 1.00">
+        <geom name="supporto_base_sx" type="sphere" size="0.045" rgba="0.1 0.1 0.1 1" contype="0" conaffinity="0"/>
+        <site name="snodo_fisso_cilindro_sx" pos="0 0 0" size="0.035" rgba="1 0 0 1"/>
+
+        <body name="canna_cilindro_sx" pos="0 0 0" zaxis="-0.325 0.946 0">
+            <joint name="snodo_base_cilindro_sx" type="ball" damping="0.05"/>
+            <inertial pos="0 0 0.40" mass="1.5" diaginertia="0.035 0.035 0.006"/>
+            <geom name="canna_visual_sx" type="cylinder" pos="0 0 0.40" size="0.035 0.40" rgba="0.15 0.15 0.15 1" contype="0" conaffinity="0"/>
+
+            <body name="stelo_cilindro_sx" pos="0 0 0">
+            <joint name="corsa_cilindro_sx" type="slide" axis="0 0 -1" range="0 0.70" limited="true" damping="20" frictionloss="5"/>
+            <inertial pos="0 0 1.20" mass="0.8" diaginertia="0.018 0.018 0.003"/>
+            <geom name="stelo_visual_sx" type="cylinder" pos="0 0 1.20" size="0.022 0.43" rgba="0.85 0.85 0.85 1" contype="0" conaffinity="0"/>
+            <site name="punta_stelo_sx" pos="0 0 1.629" size="0.035" rgba="0 1 0 1"/>
+            <geom name="snodo_mobile_visual_sx" type="sphere" pos="0 0 1.629" size="0.035" rgba="0 1 0 1" contype="0" conaffinity="0"/>
+            </body>
+        </body>
+    </body>
+
+    <!-- Pneumatico porta destra -->
+    <body name="supporto_pneumatico_dx" pos="0.65 -1.05 1.00">
+        <geom name="supporto_base_dx" type="sphere" size="0.045" rgba="0.1 0.1 0.1 1" contype="0" conaffinity="0"/>
+        <site name="snodo_fisso_cilindro_dx" pos="0 0 0" size="0.035" rgba="1 0 0 1"/>
+
+        <body name="canna_cilindro_dx" pos="0 0 0" zaxis="-0.309 0.951 0">
+            <joint name="snodo_base_cilindro_dx" type="ball" damping="0.05"/>
+            <inertial pos="0 0 0.40" mass="1.5" diaginertia="0.035 0.035 0.006"/>
+            <geom name="canna_visual_dx" type="cylinder" pos="0 0 0.40" size="0.035 0.40" rgba="0.15 0.15 0.15 1" contype="0" conaffinity="0"/>
+
+            <body name="stelo_cilindro_dx" pos="0 0 0">
+            <joint name="corsa_cilindro_dx" type="slide" axis="0 0 -1" range="0 0.70" limited="true" damping="20" frictionloss="5"/>
+            <inertial pos="0 0 1.19" mass="0.8" diaginertia="0.018 0.018 0.003"/>
+            <geom name="stelo_visual_dx" type="cylinder" pos="0 0 1.19" size="0.022 0.43" rgba="0.85 0.85 0.85 1" contype="0" conaffinity="0"/>
+            <site name="punta_stelo_dx" pos="0 0 1.619" size="0.035" rgba="0 1 0 1"/>
+            <geom name="snodo_mobile_visual_dx" type="sphere" pos="0 0 1.619" size="0.035" rgba="0 1 0 1" contype="0" conaffinity="0"/>
+            </body>
+        </body>
+    </body>
+
+    <!-- Banco frigo Astana P -->
+    <body name="banco_frigo" pos="-0.7 0.5 0">
+      <geom type="mesh" mesh="frigo_mesh" rgba="0.6 0.6 0.6 1" contype="0" conaffinity="0"/>
+
+      <body name="porta_sx" pos="0 0 0">
+        <joint name="giunto_porta_sx" type="hinge" pos="0.78 0.04 0" axis="0 0 1" range="0 1.6581" limited="true" damping="2" frictionloss="22.85"/>
+        <inertial pos="0.4 0.02 1.1" mass="26.0" diaginertia="5.547 6.799 1.257"/>
+        <geom type="mesh" mesh="porta_sx_mesh" rgba="0.3 0.8 0.9 0.4" contype="1" conaffinity="1"/>
+        <site name="debug_cernierasx" pos="0.78 0.04 0" size="0.03" rgba="0 1 0 1"/>
+
+        <body name="maniglia_sx" pos="0.07 -0.01 1.0">
+          <inertial pos="0 0 0" mass="0.2" diaginertia="0.001 0.001 0.001"/>
+          <geom name="manigliasx" type="cylinder" size="0.015 0.15" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+          <site name="target_manigliasx" pos="0 0 0" size="0.02" rgba="1 0 0 0.5"/>
+        </body>
+      </body>
+
+      <body name="porta_dx" pos="0 0 0">
+        <joint name="giunto_porta_dx" type="hinge" pos="1.59 0.04 0" axis="0 0 1" range="0 1.6581" limited="true" damping="2" frictionloss="22.85"/>
+        <inertial pos="1.2 0.02 1.1" mass="26.0" diaginertia="5.547 6.799 1.257"/>
+        <geom type="mesh" mesh="porta_dx_mesh" rgba="0.3 0.8 0.9 0.4" contype="1" conaffinity="1"/>
+        <site name="debug_cernieradx" pos="1.59 0.04 0" size="0.03" rgba="0 1 0 1"/>
+
+        <body name="maniglia_dx" pos="0.85 -0.01 1.0">
+          <inertial pos="0 0 0" mass="0.2" diaginertia="0.001 0.001 0.001"/>
+          <geom name="manigliadx" type="cylinder" size="0.015 0.15" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+          <site name="target_manigliadx" pos="0 0 0" size="0.02" rgba="1 0 0 0.5"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <equality>
+    <connect name="snodo_stelo_maniglia_sx" site1="punta_stelo_sx" site2="target_manigliasx" solimp="0.9 0.95 0.001" solref="0.02 1"/>
+    <connect name="snodo_stelo_maniglia_dx" site1="punta_stelo_dx" site2="target_manigliadx" solimp="0.9 0.95 0.001" solref="0.02 1"/>
+  </equality>
+
+  <actuator>
+    <motor name="forza_pneumatica_sx" joint="corsa_cilindro_sx" gear="1" ctrllimited="true" ctrlrange="-700 700"/>
+    <motor name="forza_pneumatica_dx" joint="corsa_cilindro_dx" gear="1" ctrllimited="true" ctrlrange="-700 700"/>
+  </actuator>
+
+  <!-- Sensori -->
+  <sensor>
+    <jointpos name="angolo_porta_sx" joint="giunto_porta_sx"/>
+    <jointvel name="velocita_porta_sx" joint="giunto_porta_sx"/>
+    <jointpos name="estensione_cilindro_sx" joint="corsa_cilindro_sx"/>
+    <jointvel name="velocita_stelo_sx" joint="corsa_cilindro_sx"/>
+    <framepos name="posizione_punta_stelo_sx" objtype="site" objname="punta_stelo_sx"/>
+    <framepos name="posizione_maniglia_sx" objtype="site" objname="target_manigliasx"/>
+
+    <jointpos name="angolo_porta_dx" joint="giunto_porta_dx"/>
+    <jointvel name="velocita_porta_dx" joint="giunto_porta_dx"/>
+    <jointpos name="estensione_cilindro_dx" joint="corsa_cilindro_dx"/>
+    <jointvel name="velocita_stelo_dx" joint="corsa_cilindro_dx"/>
+    <framepos name="posizione_punta_stelo_dx" objtype="site" objname="punta_stelo_dx"/>
+    <framepos name="posizione_maniglia_dx" objtype="site" objname="target_manigliadx"/>
+  </sensor>
+
+</mujoco>
