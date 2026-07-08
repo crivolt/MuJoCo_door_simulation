@@ -56,14 +56,5 @@
   <actuator>
     <motor name="forza_pneumatica" joint="corsa_cilindro" gear="1" ctrllimited="true" ctrlrange="-700 700"/>
   </actuator>
-
-  <sensor>
-    <jointpos name="angolo_porta" joint="giunto_porta"/>
-    <jointvel name="velocita_porta" joint="giunto_porta"/>
-    <jointpos name="estensione_cilindro" joint="corsa_cilindro"/>
-    <jointvel name="velocita_stelo" joint="corsa_cilindro"/>
-    <framepos name="posizione_punta_stelo" objtype="site" objname="punta_stelo"/>
-    <framepos name="posizione_maniglia" objtype="site" objname="target_maniglia"/>
-  </sensor>
-
+  
 </mujoco>
