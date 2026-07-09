@@ -13,7 +13,6 @@
   <worldbody>
     <geom name="pavimento" type="plane" size="5 5 0.1" rgba="0.8 0.9 0.8 1"/>
     <light directional="true" diffuse="0.8 0.8 0.8" specular="0.2 0.2 0.2" pos="0 0 5" dir="0 0 -1" castshadow="false"/>
-    <light name="top" pos="0 0 2" mode="trackcom"/>
 
     <!-- Sistema meccanico rotativo porta sinistra -->
     <body name="sistema_meccanico_sx" pos="0.2 0.0 0">

@@ -1,0 +1,162 @@
+<mujoco model="Test_sliding_door_linear_actuation_system">
+
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+  <compiler angle="radian"/>
+
+  <asset>
+    <!-- Banco frigo con porte scorrevoli -->
+    <mesh name="frigo_mesh" file="athen_xl_corpo.obj"/>
+    <mesh name="porta_sx_mesh" file="athen_xl_portasx.obj"/>
+    <mesh name="porta_dx_mesh" file="athen_xl_portadx.obj"/>
+  </asset>
+
+  <worldbody>
+    <geom name="pavimento" type="plane" size="5 5 0.1" rgba="0.8 0.9 0.8 1"/>
+    <light directional="true" diffuse="0.8 0.8 0.8" specular="0.2 0.2 0.2" pos="0 0 5" dir="0 0 -1" castshadow="false"/>
+
+    <!-- Sistema meccanico lineare porta sinistra -->
+    <body name="sistema_lineare_sx" pos="-1.50 0.75 0">
+
+      <geom name="base_meccanica_sx" type="box" pos="0 0 0.03" size="0.35 0.25 0.03" rgba="0.15 0.15 0.15 1" contype="0" conaffinity="0"/>
+      <geom name="colonna_fissa_sx" type="cylinder" pos="0 0 0.45" size="0.05 0.42" rgba="0.25 0.25 0.25 1" contype="0" conaffinity="0"/>
+
+      <body name="colonna_regolabile_sx" pos="0 0 1.00">
+        <inertial pos="0 0 -0.25" mass="4.0" diaginertia="0.08 0.08 0.02"/>
+        <geom name="colonna_mobile_sx" type="cylinder" pos="0 0 -0.25" size="0.04 0.30" rgba="0.45 0.45 0.45 1" contype="0" conaffinity="0"/>
+
+        <body name="testa_lineare_sx" pos="0 0 0">
+          <inertial pos="0.70 0 0" mass="3.0" diaginertia="0.04 0.04 0.03"/>
+          <geom name="corpo_motore_lineare_sx" type="box" pos="0 0 0" size="0.10 0.07 0.055" rgba="0.05 0.05 0.05 1" contype="0" conaffinity="0"/>
+          <site name="inizio_guida_lineare_sx" pos="0 0 0" size="0.035" rgba="0 0 1 1"/>
+
+          <!-- Guida lineare nella direzione di apertura della porta sinistra -->
+          <body name="guida_lineare_sx_body" pos="0 0 0">
+            <inertial pos="0.70 0 0" mass="2.5" diaginertia="0.08 0.08 0.006"/>
+            <geom name="guida_lineare_sx" type="capsule" fromto="0 0 0 1.45 0 0" size="0.025" rgba="0.9 0.55 0.1 1" contype="0" conaffinity="0"/>
+            <geom name="corpo_attuatore_lineare_sx" type="box" pos="0.725 0 -0.055" size="0.75 0.055 0.03" rgba="0.35 0.35 0.35 1" contype="0" conaffinity="0"/>
+            <site name="fine_guida_lineare_sx" pos="1.45 0 0" size="0.025" rgba="1 0.5 0 1"/>
+
+            <body name="carrello_lineare_sx" pos="0.40 0 0">
+              <joint name="attuatore_lineare_sx" type="slide" axis="1 0 0" range="0 1.06" limited="true" damping="20" frictionloss="2"/>
+
+              <inertial pos="0 0 0" mass="0.8" diaginertia="0.004 0.004 0.002"/>
+              <geom name="carrello_visual_sx" type="box" pos="0 0 0" size="0.055 0.04 0.025" rgba="0.2 0.6 1 1" contype="0" conaffinity="0"/>
+
+              <!-- Stelo verticale corto verso la maniglia -->
+              <geom name="stelo_verticale_sx" type="capsule" fromto="0 0 0 0 0 -0.12" size="0.018" rgba="0.75 0.75 0.75 1" contype="0" conaffinity="0"/>
+
+              <body name="giunto_allineamento_lineare_sx" pos="0 0 -0.12">
+                <joint name="snodo_allineamento_lineare_sx" type="ball" damping="0.1"/>
+
+                <inertial pos="0 0 0" mass="0.4" diaginertia="0.002 0.002 0.002"/>
+                <geom name="snodo_allineamento_visual_sx" type="sphere" pos="0 0 0" size="0.035" rgba="0.1 0.6 1 1" contype="0" conaffinity="0"/>
+
+                <body name="end_effector_lineare_sx" pos="0 0 0">
+                  <inertial pos="0 0 0" mass="0.3" diaginertia="0.001 0.001 0.001"/>
+                  <geom name="end_effector_visual_sx" type="sphere" pos="0 0 0" size="0.045" rgba="0.8 0.1 0.1 1" contype="0" conaffinity="0"/>
+                  <site name="punto_presa_lineare_sx" pos="0 0 0" size="0.03" rgba="1 0 0 1"/>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+
+    <!-- Sistema meccanico lineare porta destra -->
+    <body name="sistema_lineare_dx" pos="1.62 0.75 0">
+
+      <geom name="base_meccanica_dx" type="box" pos="0 0 0.03" size="0.35 0.25 0.03" rgba="0.15 0.15 0.15 1" contype="0" conaffinity="0"/>
+      <geom name="colonna_fissa_dx" type="cylinder" pos="0 0 0.45" size="0.05 0.42" rgba="0.25 0.25 0.25 1" contype="0" conaffinity="0"/>
+
+      <body name="colonna_regolabile_dx" pos="0 0 1.00">
+        <inertial pos="0 0 -0.25" mass="4.0" diaginertia="0.08 0.08 0.02"/>
+        <geom name="colonna_mobile_dx" type="cylinder" pos="0 0 -0.25" size="0.04 0.30" rgba="0.45 0.45 0.45 1" contype="0" conaffinity="0"/>
+
+        <body name="testa_lineare_dx" pos="0 0 0">
+          <inertial pos="-0.70 0 0" mass="3.0" diaginertia="0.04 0.04 0.03"/>
+          <geom name="corpo_motore_lineare_dx" type="box" pos="0 0 0" size="0.10 0.07 0.055" rgba="0.05 0.05 0.05 1" contype="0" conaffinity="0"/>
+          <site name="inizio_guida_lineare_dx" pos="0 0 0" size="0.035" rgba="0 0 1 1"/>
+
+          <body name="guida_lineare_dx_body" pos="0 0 0">
+            <inertial pos="-0.70 0 0" mass="2.5" diaginertia="0.08 0.08 0.006"/>
+            <geom name="guida_lineare_dx" type="capsule" fromto="0 0 0 -1.45 0 0" size="0.025" rgba="0.9 0.55 0.1 1" contype="0" conaffinity="0"/>
+            <geom name="corpo_attuatore_lineare_dx" type="box" pos="-0.725 0 -0.055" size="0.75 0.055 0.03" rgba="0.35 0.35 0.35 1" contype="0" conaffinity="0"/>
+            <site name="fine_guida_lineare_dx" pos="-1.45 0 0" size="0.025" rgba="1 0.5 0 1"/>
+
+            <body name="carrello_lineare_dx" pos="-0.40 0 0">
+              <joint name="attuatore_lineare_dx" type="slide" axis="-1 0 0" range="0 1.06" limited="true" damping="20" frictionloss="2"/>
+
+              <inertial pos="0 0 0" mass="0.8" diaginertia="0.004 0.004 0.002"/>
+              <geom name="carrello_visual_dx" type="box" pos="0 0 0" size="0.055 0.04 0.025" rgba="0.2 0.6 1 1" contype="0" conaffinity="0"/>
+
+              <geom name="stelo_verticale_dx" type="capsule" fromto="0 0 0 0 0 -0.11" size="0.018" rgba="0.75 0.75 0.75 1" contype="0" conaffinity="0"/>
+
+              <body name="giunto_allineamento_lineare_dx" pos="0 0 -0.11">
+                <joint name="snodo_allineamento_lineare_dx" type="ball" damping="0.1"/>
+
+                <inertial pos="0 0 0" mass="0.4" diaginertia="0.002 0.002 0.002"/>
+                <geom name="snodo_allineamento_visual_dx" type="sphere" pos="0 0 0" size="0.035" rgba="0.1 0.6 1 1" contype="0" conaffinity="0"/>
+
+                <body name="end_effector_lineare_dx" pos="0 0 0">
+                  <inertial pos="0 0 0" mass="0.3" diaginertia="0.001 0.001 0.001"/>
+                  <geom name="end_effector_visual_dx" type="sphere" pos="0 0 0" size="0.045" rgba="0.8 0.1 0.1 1" contype="0" conaffinity="0"/>
+                  <site name="punto_presa_lineare_dx" pos="0 0 0" size="0.03" rgba="1 0 0 1"/>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+
+    <!-- Banco frigo con porte scorrevoli: invariato -->
+    <body name="banco_frigo" pos="-1.2 0.45 0">
+      <geom type="mesh" mesh="frigo_mesh" rgba="0.6 0.6 0.6 1" contype="0" conaffinity="0"/>
+
+      <body name="porta_sx" pos="0 0 0">
+        <joint name="slide_sx" type="slide" axis="1 0 0" range="0 1.06" limited="true" damping="30" frictionloss="41.9"/>
+        <inertial pos="0.65 0.7 0.9" mass="12" diaginertia="0.9801 1.5376 2.5177"/>
+        <geom type="mesh" mesh="porta_sx_mesh" rgba="0.3 0.8 0.9 0.4" contype="0" conaffinity="0"/>
+
+        <body name="maniglia_sx" pos="0.1 0.3 0.88" euler="1.75 0 0">
+          <inertial pos="0 0 0" mass="0.2" diaginertia="0.001 0.001 0.001"/>
+          <geom name="manigliasx" type="cylinder" size="0.015 0.1" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+          <site name="target_manigliasx" pos="0 0 0" size="0.02" rgba="1 0 0 0.5"/>
+        </body>
+      </body>
+
+      <body name="porta_dx" pos="0 0 0">
+        <joint name="slide_dx" type="slide" axis="-1 0 0" range="0 1.06" limited="true" damping="30" frictionloss="41.9"/>
+        <inertial pos="1.85 0.7 0.9" mass="12" diaginertia="0.9801 1.5376 2.5177"/>
+        <geom type="mesh" mesh="porta_dx_mesh" rgba="0.3 0.8 0.9 0.4" contype="0" conaffinity="0"/>
+
+        <body name="maniglia_dx" pos="2.42 0.3 0.89" euler="1.75 0 0">
+          <inertial pos="0 0 0" mass="0.2" diaginertia="0.001 0.001 0.001"/>
+          <geom name="manigliadx" type="cylinder" size="0.015 0.1" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+          <site name="target_manigliadx" pos="0 0 0" size="0.02" rgba="1 0 0 0.5"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <equality>
+    <connect name="presa_lineare_maniglia_sx"
+             site1="punto_presa_lineare_sx"
+             site2="target_manigliasx"
+             solimp="0.85 0.95 0.002"
+             solref="0.03 1"/>
+
+    <connect name="presa_lineare_maniglia_dx"
+             site1="punto_presa_lineare_dx"
+             site2="target_manigliadx"
+             solimp="0.85 0.95 0.002"
+             solref="0.03 1"/>
+  </equality>
+
+  <actuator>
+    <motor name="motore_lineare_sx" joint="attuatore_lineare_sx" gear="1" ctrllimited="true" ctrlrange="-800 800"/>
+    <motor name="motore_lineare_dx" joint="attuatore_lineare_dx" gear="1" ctrllimited="true" ctrlrange="-800 800"/>
+  </actuator>
+
+</mujoco>

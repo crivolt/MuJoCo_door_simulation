@@ -117,20 +117,4 @@
     <motor name="forza_pneumatica_dx" joint="corsa_cilindro_dx" gear="1" ctrllimited="true" ctrlrange="-1000 1000"/>
   </actuator>
 
-  <sensor>
-    <jointpos name="posizione_porta_sx" joint="slide_sx"/>
-    <jointvel name="velocita_porta_sx" joint="slide_sx"/>
-    <jointpos name="estensione_cilindro_sx" joint="corsa_cilindro_sx"/>
-    <jointvel name="velocita_stelo_sx" joint="corsa_cilindro_sx"/>
-    <framepos name="posizione_aggrappo_staffa_sx" objtype="site" objname="aggrappo_staffa_maniglia_sx"/>
-    <framepos name="posizione_maniglia_sx" objtype="site" objname="target_manigliasx"/>
-
-    <jointpos name="posizione_porta_dx" joint="slide_dx"/>
-    <jointvel name="velocita_porta_dx" joint="slide_dx"/>
-    <jointpos name="estensione_cilindro_dx" joint="corsa_cilindro_dx"/>
-    <jointvel name="velocita_stelo_dx" joint="corsa_cilindro_dx"/>
-    <framepos name="posizione_aggrappo_staffa_dx" objtype="site" objname="aggrappo_staffa_maniglia_dx"/>
-    <framepos name="posizione_maniglia_dx" objtype="site" objname="target_manigliadx"/>
-  </sensor>
-
 </mujoco>
