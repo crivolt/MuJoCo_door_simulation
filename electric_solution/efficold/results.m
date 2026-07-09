@@ -1,9 +1,9 @@
-clear all
+clear
 clc
 close all
 
 % Load data
-data = load("/Users/cristianvoltan/Desktop/unipd/tirocinio/CAD/electric_solution/studio54/dati_porta_meccanica_electrolux.mat");
+data = load("/Users/cristianvoltan/Desktop/unipd/tirocinio/CAD/electric_solution/efficold/dati_porta_meccanica_efficold.mat");
 t = data.tempo(:);
 door_pos = data.posizione_porta(:);
 door_vel = data.velocita_porta(:);

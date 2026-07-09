@@ -1,0 +1,172 @@
+<mujoco model="Test_astana_p_mechanical_rotary_system">
+
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+  <compiler angle="radian"/>
+
+  <asset>
+    <!-- Frigo -->
+    <mesh name="frigo_mesh" file="astana_P_corpo.obj"/>
+    <mesh name="porta_sx_mesh" file="astana_P_portasx.obj"/>
+    <mesh name="porta_dx_mesh" file="astana_P_portadx.obj"/>
+  </asset>
+
+  <worldbody>
+    <geom name="pavimento" type="plane" size="5 5 0.1" rgba="0.8 0.9 0.8 1"/>
+    <light directional="true" diffuse="0.8 0.8 0.8" specular="0.2 0.2 0.2" pos="0 0 5" dir="0 0 -1" castshadow="false"/>
+    <light name="top" pos="0 0 2" mode="trackcom"/>
+
+    <!-- Sistema meccanico rotativo porta sinistra -->
+    <body name="sistema_meccanico_sx" pos="0.2 0.0 0">
+
+      <geom name="base_meccanica_sx" type="box" pos="0 0 0.03" size="0.35 0.25 0.03" rgba="0.15 0.15 0.15 1" contype="0" conaffinity="0"/>
+      <geom name="colonna_fissa_sx" type="cylinder" pos="0 0 0.45" size="0.05 0.42" rgba="0.25 0.25 0.25 1" contype="0" conaffinity="0"/>
+
+      <body name="colonna_regolabile_sx" pos="0 0 1.00">
+        <inertial pos="0 0 -0.25" mass="4.0" diaginertia="0.08 0.08 0.02"/>
+        <geom name="colonna_mobile_sx" type="cylinder" pos="0 0 -0.25" size="0.04 0.30" rgba="0.45 0.45 0.45 1" contype="0" conaffinity="0"/>
+
+        <body name="motoriduttore_sx" pos="0 0 0">
+          <inertial pos="0 0 0" mass="3.0" diaginertia="0.04 0.04 0.03"/>
+          <geom name="motoriduttore_visual_sx" type="cylinder" pos="0 0 0" size="0.09 0.06" rgba="0.05 0.05 0.05 1" contype="0" conaffinity="0"/>
+          <site name="asse_motoriduttore_sx" pos="0 0 0" size="0.035" rgba="0 0 1 1"/>
+
+          <body name="braccio_rotante_sx" pos="0 0 0" xyaxes="-0.861133 0.508380 0 -0.508380 -0.861133 0">
+            <joint name="giunto_rotante_sx" type="hinge" axis="0 0 1" range="-1.5708 1.5708" limited="true" damping="5" frictionloss="1"/>
+
+            <inertial pos="0.465 0 0" mass="2.5" diaginertia="0.08 0.08 0.006"/>
+            <geom name="braccio_guida_visual_sx" type="capsule" fromto="0 0 0 0.94 0 0" size="0.025" rgba="0.9 0.55 0.1 1" contype="0" conaffinity="0"/>
+            <site name="asse_braccio_sx" pos="0.94 0 0" size="0.025" rgba="1 0.5 0 1"/>
+
+            <body name="carrello_telescopico_sx" pos="0.963846 0 0">
+              <joint name="compensazione_radiale_sx" type="slide" axis="1 0 0" range="-0.6 0.20" limited="true" damping="15" frictionloss="0.5"/>
+
+              <inertial pos="0 0 0" mass="0.8" diaginertia="0.004 0.004 0.002"/>
+              <geom name="carrello_visual_sx" type="box" pos="0 0 0" size="0.055 0.04 0.025" rgba="0.2 0.6 1 1" contype="0" conaffinity="0"/>
+              <geom name="stelo_telescopico_visual_sx" type="capsule" fromto="-0.35 0 0 0 0 0" size="0.018" rgba="0.75 0.75 0.75 1" contype="0" conaffinity="0"/>
+
+              <body name="giunto_allineamento_sx" pos="0 0 0">
+                <joint name="snodo_allineamento_sx" type="ball" damping="0.1"/>
+
+                <inertial pos="0 0 0" mass="0.4" diaginertia="0.002 0.002 0.002"/>
+                <geom name="snodo_allineamento_visual_sx" type="sphere" pos="0 0 0" size="0.035" rgba="0.1 0.6 1 1" contype="0" conaffinity="0"/>
+
+                <body name="end_effector_sx" pos="0 0 0">
+                  <inertial pos="0 0 0" mass="0.3" diaginertia="0.001 0.001 0.001"/>
+                  <geom name="end_effector_visual_sx" type="sphere" pos="0 0 0" size="0.045" rgba="0.8 0.1 0.1 1" contype="0" conaffinity="0"/>
+                  <site name="punto_presa_meccanico_sx" pos="0 0 0" size="0.03" rgba="1 0 0 1"/>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+
+    <!-- Sistema meccanico rotativo porta destra -->
+    <body name="sistema_meccanico_dx" pos="0.964482 -0.005189 0">
+
+      <geom name="base_meccanica_dx" type="box" pos="0 0 0.03" size="0.35 0.25 0.03" rgba="0.15 0.15 0.15 1" contype="0" conaffinity="0"/>
+      <geom name="colonna_fissa_dx" type="cylinder" pos="0 0 0.45" size="0.05 0.42" rgba="0.25 0.25 0.25 1" contype="0" conaffinity="0"/>
+
+      <body name="colonna_regolabile_dx" pos="0 0 1.00">
+        <inertial pos="0 0 -0.25" mass="4.0" diaginertia="0.08 0.08 0.02"/>
+        <geom name="colonna_mobile_dx" type="cylinder" pos="0 0 -0.25" size="0.04 0.30" rgba="0.45 0.45 0.45 1" contype="0" conaffinity="0"/>
+
+        <body name="motoriduttore_dx" pos="0 0 0">
+          <inertial pos="0 0 0" mass="3.0" diaginertia="0.04 0.04 0.03"/>
+          <geom name="motoriduttore_visual_dx" type="cylinder" pos="0 0 0" size="0.09 0.06" rgba="0.05 0.05 0.05 1" contype="0" conaffinity="0"/>
+          <site name="asse_motoriduttore_dx" pos="0 0 0" size="0.035" rgba="0 0 1 1"/>
+
+          <body name="braccio_rotante_dx" pos="0 0 0" xyaxes="-0.854470 0.519501 0 -0.519501 -0.854470 0">
+            <joint name="giunto_rotante_dx" type="hinge" axis="0 0 1" range="-1.5708 1.5708" limited="true" damping="5" frictionloss="1"/>
+
+            <inertial pos="0.465 0 0" mass="2.5" diaginertia="0.08 0.08 0.006"/>
+            <geom name="braccio_guida_visual_dx" type="capsule" fromto="0 0 0 0.94 0 0" size="0.025" rgba="0.9 0.55 0.1 1" contype="0" conaffinity="0"/>
+            <site name="asse_braccio_dx" pos="0.94 0 0" size="0.025" rgba="1 0.5 0 1"/>
+
+            <body name="carrello_telescopico_dx" pos="0.953201 0 0">
+              <joint name="compensazione_radiale_dx" type="slide" axis="1 0 0" range="-0.6 0.20" limited="true" damping="15" frictionloss="0.5"/>
+
+              <inertial pos="0 0 0" mass="0.8" diaginertia="0.004 0.004 0.002"/>
+              <geom name="carrello_visual_dx" type="box" pos="0 0 0" size="0.055 0.04 0.025" rgba="0.2 0.6 1 1" contype="0" conaffinity="0"/>
+              <geom name="stelo_telescopico_visual_dx" type="capsule" fromto="-0.35 0 0 0 0 0" size="0.018" rgba="0.75 0.75 0.75 1" contype="0" conaffinity="0"/>
+
+              <body name="giunto_allineamento_dx" pos="0 0 0">
+                <joint name="snodo_allineamento_dx" type="ball" damping="0.1"/>
+
+                <inertial pos="0 0 0" mass="0.4" diaginertia="0.002 0.002 0.002"/>
+                <geom name="snodo_allineamento_visual_dx" type="sphere" pos="0 0 0" size="0.035" rgba="0.1 0.6 1 1" contype="0" conaffinity="0"/>
+
+                <body name="end_effector_dx" pos="0 0 0">
+                  <inertial pos="0 0 0" mass="0.3" diaginertia="0.001 0.001 0.001"/>
+                  <geom name="end_effector_visual_dx" type="sphere" pos="0 0 0" size="0.045" rgba="0.8 0.1 0.1 1" contype="0" conaffinity="0"/>
+                  <site name="punto_presa_meccanico_dx" pos="0 0 0" size="0.03" rgba="1 0 0 1"/>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+
+    <!-- Banco frigo Astana P: invariato -->
+    <body name="banco_frigo" pos="-0.7 0.5 0">
+      <geom type="mesh" mesh="frigo_mesh" rgba="0.6 0.6 0.6 1" contype="0" conaffinity="0"/>
+
+      <body name="porta_sx" pos="0 0 0">
+        <joint name="giunto_porta_sx" type="hinge" pos="0.78 0.04 0" axis="0 0 1" range="0 1.6581" limited="true" damping="2" frictionloss="22.85"/>
+        <inertial pos="0.4 0.02 1.1" mass="26.0" diaginertia="5.547 6.799 1.257"/>
+        <geom type="mesh" mesh="porta_sx_mesh" rgba="0.3 0.8 0.9 0.4" contype="1" conaffinity="1"/>
+        <site name="debug_cernierasx" pos="0.78 0.04 0" size="0.03" rgba="0 1 0 1"/>
+
+        <body name="maniglia_sx" pos="0.07 -0.01 1.0">
+          <inertial pos="0 0 0" mass="0.2" diaginertia="0.001 0.001 0.001"/>
+          <geom name="manigliasx" type="cylinder" size="0.015 0.15" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+          <site name="target_manigliasx" pos="0 0 0" size="0.02" rgba="1 0 0 0.5"/>
+        </body>
+      </body>
+
+      <body name="porta_dx" pos="0 0 0">
+        <joint name="giunto_porta_dx" type="hinge" pos="1.59 0.04 0" axis="0 0 1" range="0 1.6581" limited="true" damping="2" frictionloss="22.85"/>
+        <inertial pos="1.2 0.02 1.1" mass="26.0" diaginertia="5.547 6.799 1.257"/>
+        <geom type="mesh" mesh="porta_dx_mesh" rgba="0.3 0.8 0.9 0.4" contype="1" conaffinity="1"/>
+        <site name="debug_cernieradx" pos="1.59 0.04 0" size="0.03" rgba="0 1 0 1"/>
+
+        <body name="maniglia_dx" pos="0.85 -0.01 1.0">
+          <inertial pos="0 0 0" mass="0.2" diaginertia="0.001 0.001 0.001"/>
+          <geom name="manigliadx" type="cylinder" size="0.015 0.15" rgba="0.8 0.2 0.2 1" contype="0" conaffinity="0"/>
+          <site name="target_manigliadx" pos="0 0 0" size="0.02" rgba="1 0 0 0.5"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <equality>
+    <connect name="presa_meccanica_maniglia_sx"
+             site1="punto_presa_meccanico_sx"
+             site2="target_manigliasx"
+             solimp="0.85 0.95 0.002"
+             solref="0.03 1"/>
+
+    <connect name="presa_meccanica_maniglia_dx"
+             site1="punto_presa_meccanico_dx"
+             site2="target_manigliadx"
+             solimp="0.85 0.95 0.002"
+             solref="0.03 1"/>
+  </equality>
+
+  <actuator>
+    <motor name="motore_motoriduttore_sx"
+           joint="giunto_rotante_sx"
+           gear="1"
+           ctrllimited="true"
+           ctrlrange="-150 150"/>
+
+    <motor name="motore_motoriduttore_dx"
+           joint="giunto_rotante_dx"
+           gear="1"
+           ctrllimited="true"
+           ctrlrange="-150 150"/>
+  </actuator>
+
+</mujoco>

@@ -6,7 +6,7 @@ import scipy.io
 
 
 # LOAD MODEL
-MODEL_PATH = "/Users/cristianvoltan/Desktop/unipd/tirocinio/CAD/electric_solution/studio54/studio_54_ele.xml"
+MODEL_PATH = "/Users/cristianvoltan/Desktop/unipd/tirocinio/CAD/electric_solution/efficold/efficold_ele.xml"
 model = mujoco.MjModel.from_xml_path(MODEL_PATH)
 data = mujoco.MjData(model)
 
@@ -21,17 +21,35 @@ def get_actuator_id(model, name):
     return aid
 
 
+def get_equality_id(model, name):
+    eid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_EQUALITY, name)
+    return eid
+
+
+def quat_angle_deg(quat):
+    # Angolo di rotazione in gradi rispetto al quaternione identità
+    w = np.clip(quat[0], -1.0, 1.0)
+    return np.rad2deg(2.0 * np.arccos(np.abs(w)))
+
+
+def smoothstep(s):
+    s = np.clip(s, 0.0, 1.0)
+    return 3.0 * s**2 - 2.0 * s**3
+
+
 # JOINTS
 door_joint_id, door_qposadr, door_dofadr = get_joint_addr(model, "giunto_porta")
 motor_joint_id, motor_qposadr, motor_dofadr = get_joint_addr(model, "giunto_rotante")
 comp_radiale_joint_id, comp_radiale_qposadr, comp_radiale_dofadr = get_joint_addr(model, "compensazione_radiale")
 align_joint_id, align_qposadr, align_dofadr = get_joint_addr(model, "snodo_allineamento")
 
-# ACTUATORS
-motor_actuator_id = get_actuator_id(model, "servo_motoriduttore")
+
+# ACTUATOR
+motor_actuator_id = get_actuator_id(model, "motore_motoriduttore")
+
 
 # EQUALITY CONSTRAINT BETWEEN END EFFECTOR AND HANDLE
-connect_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_EQUALITY, "presa_meccanica_maniglia")
+connect_id = get_equality_id(model, "presa_meccanica_maniglia")
 data.eq_active[connect_id] = 1
 
 mujoco.mj_forward(model, data)
@@ -41,27 +59,32 @@ mujoco.mj_forward(model, data)
 NUM_CYCLES = 1
 current_cycle = 0
 
+# Efficold:
+# giunto_porta range="-2.0944 0"
+# chiuso = 0 rad
+# aperto = valore negativo
 OPEN_DEG = 62.0
-OPEN_RAD = np.deg2rad(OPEN_DEG)
+OPEN_RAD = -np.deg2rad(OPEN_DEG)
 
 T_OPEN = 1.0
 T_WAIT_OPEN = 4.0
 T_CLOSE = 1.0
 T_WAIT_CLOSED = 5.0
 
-TORQUE_MAX = 150.0
+TORQUE_MAX = 200.0
 
-K_OPEN = 2500
-D_OPEN = 120
+K_OPEN = 3000.0
+D_OPEN = 120.0
 
-K_CLOSE = 2500
-D_CLOSE = 120
+K_CLOSE = 2500.0
+D_CLOSE = 120.0
 
-K_HOLD = 2000
-D_HOLD = 150
+K_HOLD = 2000.0
+D_HOLD = 150.0
 
-FRICTION_CLOSED = 54.02
-FRICTION_MOVING = 5.402
+FRICTION_CLOSED = 9.30
+FRICTION_MOVING = 1.86
+
 
 # STATE MACHINE
 OPEN_DOOR = 0
@@ -75,27 +98,17 @@ phase_start_time = 0.0
 phase_start_angle = data.qpos[door_qposadr]
 
 
-# LOGGING 
+# LOGGING
 log_time = []
 log_door_deg = []
 log_door_vel_deg = []
-log_motor_deg = []  
+log_motor_deg = []
 log_comp_radiale_mm = []
 log_align_deg = []
 
 
-def quat_angle_deg(quat):
-    # angolo di rotazione (in gradi) rispetto al quaternione identita' (1,0,0,0)
-    w = np.clip(quat[0], -1.0, 1.0)
-    return np.rad2deg(2.0 * np.arccos(np.abs(w)))
-
-
-def smoothstep(s):
-    s = np.clip(s, 0.0, 1.0)
-    return 3.0 * s**2 - 2.0 * s**3
-
-
-def test_open_direction(test_torque):
+def test_motor_to_door_direction(test_torque):
+    # Applica una coppia di test al motoriduttore e misura come si muove la porta
     test_data = mujoco.MjData(model)
     test_data.eq_active[connect_id] = 1
     mujoco.mj_forward(model, test_data)
@@ -107,10 +120,15 @@ def test_open_direction(test_torque):
     return test_data.qpos[door_qposadr]
 
 
-theta_positive = test_open_direction(+50.0)
-theta_negative = test_open_direction(-50.0)
-OPEN_SIGN = 1.0 if theta_positive > theta_negative else -1.0
-print(f"Opening sign selected: {OPEN_SIGN:+.0f}")
+# TEST AUTOMATICO DEL VERSO DEL MOTORE
+theta_positive = test_motor_to_door_direction(+50.0)
+theta_negative = test_motor_to_door_direction(-50.0)
+
+MOTOR_TO_DOOR_SIGN = 1.0 if theta_positive > theta_negative else -1.0
+
+print(f"Door angle after +50 Nm test: {np.rad2deg(theta_positive):.3f} deg")
+print(f"Door angle after -50 Nm test: {np.rad2deg(theta_negative):.3f} deg")
+print(f"Motor-to-door sign selected: {MOTOR_TO_DOOR_SIGN:+.0f}")
 
 
 # RESET AFTER DIRECTION TEST
@@ -139,13 +157,17 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         # PHASE 0: OPEN DOOR
         if phase == OPEN_DOOR:
+
             s = smoothstep(phase_timer / T_OPEN)
+
+            # Per Efficold OPEN_RAD è negativo
             theta_des = phase_start_angle + s * (OPEN_RAD - phase_start_angle)
 
             model.dof_frictionloss[door_dofadr] = (FRICTION_CLOSED if door_angle < np.deg2rad(1.0) else FRICTION_MOVING)
 
             error = theta_des - door_angle
-            tau_motor = OPEN_SIGN * (K_OPEN * error - D_OPEN * door_vel)
+
+            tau_motor = MOTOR_TO_DOOR_SIGN * (K_OPEN * error - D_OPEN * door_vel)
             motor_ctrl = np.clip(tau_motor, -TORQUE_MAX, TORQUE_MAX)
 
             if phase_timer >= T_OPEN:
@@ -156,8 +178,10 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         # PHASE 1: WAIT WITH DOOR OPEN
         elif phase == WAIT_OPEN:
+
             error = OPEN_RAD - door_angle
-            tau_motor = OPEN_SIGN * (K_HOLD * error - D_HOLD * door_vel)
+
+            tau_motor = MOTOR_TO_DOOR_SIGN * (K_HOLD * error - D_HOLD * door_vel)
             motor_ctrl = np.clip(tau_motor, -TORQUE_MAX, TORQUE_MAX)
 
             if phase_timer >= T_WAIT_OPEN:
@@ -168,13 +192,17 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         # PHASE 2: CLOSE DOOR
         elif phase == CLOSE_DOOR:
+
             s = smoothstep(phase_timer / T_CLOSE)
+
+            # Chiuso = 0 rad
             theta_des = phase_start_angle + s * (0.0 - phase_start_angle)
 
             model.dof_frictionloss[door_dofadr] = FRICTION_MOVING
 
             error = theta_des - door_angle
-            tau_motor = OPEN_SIGN * (K_CLOSE * error - D_CLOSE * door_vel)
+
+            tau_motor = MOTOR_TO_DOOR_SIGN * (K_CLOSE * error - D_CLOSE * door_vel)
             motor_ctrl = np.clip(tau_motor, -TORQUE_MAX, TORQUE_MAX)
 
             if phase_timer >= T_CLOSE:
@@ -185,15 +213,16 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         # PHASE 3: WAIT WITH DOOR CLOSED
         elif phase == WAIT_CLOSED:
-            # ripristina l'attrito statico ora che la porta e' ferma e chiusa
+
             model.dof_frictionloss[door_dofadr] = FRICTION_CLOSED
 
             error = 0.0 - door_angle
-            tau_motor = OPEN_SIGN * (K_HOLD * error - D_HOLD * door_vel)
+
+            tau_motor = MOTOR_TO_DOOR_SIGN * (K_HOLD * error - D_HOLD * door_vel)
             motor_ctrl = np.clip(tau_motor, -TORQUE_MAX, TORQUE_MAX)
-            
 
             if phase_timer >= T_WAIT_CLOSED:
+
                 current_cycle += 1
                 print(f"=== Cycle {current_cycle}/{NUM_CYCLES} completed ===")
 
@@ -238,7 +267,7 @@ print(f"Final door angle: {door_angle_deg:.2f} deg")
 
 
 # SAVE DATA
-scipy.io.savemat("dati_porta_meccanica_electrolux.mat", {
+scipy.io.savemat("dati_porta_meccanica_efficold.mat", {
     "tempo": np.array(log_time),
     "posizione_porta": np.array(log_door_deg),
     "velocita_porta": np.array(log_door_vel_deg),
@@ -246,3 +275,5 @@ scipy.io.savemat("dati_porta_meccanica_electrolux.mat", {
     "correzione_allineamento_radiale_mm": np.array(log_comp_radiale_mm),
     "rotazione_allineamento_deg": np.array(log_align_deg),
 })
+
+print("Dati salvati in: dati_porta_meccanica_efficold.mat")
