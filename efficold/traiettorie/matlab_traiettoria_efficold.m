@@ -17,22 +17,35 @@ X_cerchio = ones(size(theta)) * Xc;
 Y_cerchio = Yc + R * cos(theta);   
 Z_cerchio = Zc + R * sin(theta);
 
-% 3d plot
-figure;
+% Create figure
+figure('Units', 'centimeters', 'Position', [2 2 14 11], 'Color', 'w');
+
 hold on;
 grid on;
-plot3(X, Y, Z, 'b', 'LineWidth', 2);
-plot3(X_cerchio, Y_cerchio, Z_cerchio, '--k', 'LineWidth', 1.5)
+box on;
 
-% start and end points
-plot3(X(1), Y(1), Z(1), 'go', 'MarkerSize', 10, 'MarkerFaceColor', 'g'); % Inizio (Verde)
-plot3(X(end), Y(end), Z(end), 'ro', 'MarkerSize', 10, 'MarkerFaceColor', 'r'); % Fine (Rosso)
+% Plot trajectory and ideal circumference
+plot3(X, Y, Z, 'b', 'LineWidth', 3);
+plot3(X_cerchio, Y_cerchio, Z_cerchio, '--k', 'LineWidth', 2.5);
 
-xlabel('X (m)');
-ylabel('Y (m)');
-zlabel('Z (m)');
-title('Trajectory');
-legend('Trajectory', 'Ideal Circumference', 'Start', 'End');
+% Start and end points
+plot3(X(1), Y(1), Z(1), 'go', 'MarkerSize', 14, 'MarkerFaceColor', 'g', 'LineWidth', 1.2);
+plot3(X(end), Y(end), Z(end), 'ro', 'MarkerSize', 14, 'MarkerFaceColor', 'r', 'LineWidth', 1.2);
+
+% Axis appearance
+ax = gca;
+ax.FontSize = 20;
+ax.LineWidth = 1.5;
+
+% Labels and title
+xlabel('X (m)', 'FontSize', 25, 'FontWeight', 'bold');
+ylabel('Y (m)', 'FontSize', 25, 'FontWeight', 'bold');
+zlabel('Z (m)', 'FontSize', 25, 'FontWeight', 'bold');
+title('Trajectory', 'FontSize', 30, 'FontWeight', 'bold');
+
+% Legend
+legend('Trajectory', 'Ideal Circumference', 'Start', 'End', 'FontSize', 20, 'Location', 'northeast', 'Box', 'on');
+
 axis equal;
 
 

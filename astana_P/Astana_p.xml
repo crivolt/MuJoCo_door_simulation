@@ -1,4 +1,4 @@
-
+<!--
 <mujoco model="Test_astana_p_con_panda">
 
     <option timestep="0.002" gravity="0 0 -9.81"/>
@@ -52,8 +52,7 @@
     </equality>
 
 </mujoco>
-
-<!--
+-->
 <mujoco model="Test_astana_p_con_panda">
     <compiler angle="degree" />
 
@@ -110,5 +109,5 @@
     </equality>
 
 </mujoco>
--->
+
 
