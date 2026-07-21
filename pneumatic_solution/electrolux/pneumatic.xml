@@ -24,7 +24,7 @@
             <geom name="canna_visual" type="cylinder" pos="0 0 0.40" size="0.035 0.40" rgba="0.15 0.15 0.15 1" contype="0" conaffinity="0"/>
 
             <body name="stelo_cilindro" pos="0 0 0">
-            <joint name="corsa_cilindro" type="slide" axis="0 0 -1" range="0 0.70" limited="true" damping="20" frictionloss="5"/>
+            <joint name="corsa_cilindro" type="slide" axis="0 0 -1" range="0 0.65" limited="true" damping="20" frictionloss="5"/>
             <inertial pos="0 0 1.25" mass="0.8" diaginertia="0.018 0.018 0.003"/>
             <geom name="stelo_visual" type="cylinder" pos="0 0 1.25" size="0.022 0.45" rgba="0.85 0.85 0.85 1" contype="0" conaffinity="0"/>
             <site name="punta_stelo" pos="0 0 1.70" size="0.035" rgba="0 1 0 1"/>

@@ -1,6 +1,7 @@
 import mujoco
 import mujoco.viewer
 import numpy as np
+import scipy.io
 
 # LOAD MODEL
 
@@ -39,14 +40,14 @@ D_GRASP = 120.0
 #K_OPENING = 2500.0
 #D_OPENING = 350.0
 
-K_OPENING = 400.0 
-D_OPENING = 60.0
+K_OPENING = 800.0 
+D_OPENING = 100.0
 
 #K_CLOSING = 2000.0
 #D_CLOSING = 300.0
 
 K_CLOSING = 600.0
-D_CLOSING = 90.0
+D_CLOSING = 100.0
 
 #K_HOLD = 2500.0
 #D_HOLD = 350.0
@@ -177,7 +178,7 @@ CLOSE_DOOR      = 5
 HOLD_CLOSED     = 6
 
 # NUM_CYCLES
-NUM_CYCLES = 2
+NUM_CYCLES = 1
 current_cycle = 0
 
 # VARIABLES
@@ -276,6 +277,11 @@ def solve_position_ik(target, gain):
 
     return np.linalg.norm(error_pos)
 
+log_time     = []
+log_door_deg = []
+log_door_vel = []
+log_tau      = []
+
 
 # SIMULATION
 MAX_STEPS = 30000 * NUM_CYCLES
@@ -348,7 +354,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
                 data.eq_active[weld_id] = 1
 
-                if phase_timer >= 25000:
+                if phase_timer >= 2500:
                     data.qvel[:] = 0.0
                     data.qacc[:] = 0.0
                     mujoco.mj_forward(model, data)
@@ -508,9 +514,18 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         else:
             data.ctrl[gripper_actuator] = 50
 
+        joint_torques = data.qfrc_actuator[all_dofadr]
+
 
         # STEP SIMULATION
         mujoco.mj_step(model, data)
+
+        # LOGGING
+        log_time.append(step * model.opt.timestep)
+        log_door_deg.append(np.rad2deg(data.qpos[door_qposadr]))
+        log_door_vel.append(np.rad2deg(data.qvel[door_dofadr]))
+        log_tau.append(joint_torques.copy())
+
         viewer.sync()
 
         # PRINT INFORMATION
@@ -526,3 +541,9 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
     door_angle_deg = np.rad2deg(data.qpos[door_qposadr])
     print(f"Apertura porta finale: {door_angle_deg:.2f}°")
+    scipy.io.savemat("dati_porta_franka.mat", {
+    "tempo":    np.array(log_time),
+    "apertura": np.array(log_door_deg),
+    "velocita": np.array(log_door_vel),
+    "tau":      np.array(log_tau),
+})

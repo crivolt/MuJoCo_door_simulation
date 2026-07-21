@@ -25,7 +25,7 @@
             <geom name="canna_visual_sx" type="cylinder" pos="0 0 0.40" size="0.035 0.40" rgba="0.15 0.15 0.15 1" contype="0" conaffinity="0"/>
 
             <body name="stelo_cilindro_sx" pos="0 0 0">
-            <joint name="corsa_cilindro_sx" type="slide" axis="0 0 -1" range="0 0.70" limited="true" damping="20" frictionloss="5"/>
+            <joint name="corsa_cilindro_sx" type="slide" axis="0 0 -1" range="0 0.57" limited="true" damping="20" frictionloss="5"/>
             <inertial pos="0 0 1.20" mass="0.8" diaginertia="0.018 0.018 0.003"/>
             <geom name="stelo_visual_sx" type="cylinder" pos="0 0 1.20" size="0.022 0.43" rgba="0.85 0.85 0.85 1" contype="0" conaffinity="0"/>
             <site name="punta_stelo_sx" pos="0 0 1.632" size="0.035" rgba="0 1 0 1"/>
@@ -45,7 +45,7 @@
             <geom name="canna_visual_dx" type="cylinder" pos="0 0 0.40" size="0.035 0.40" rgba="0.15 0.15 0.15 1" contype="0" conaffinity="0"/>
 
             <body name="stelo_cilindro_dx" pos="0 0 0">
-            <joint name="corsa_cilindro_dx" type="slide" axis="0 0 -1" range="0 0.70" limited="true" damping="20" frictionloss="5"/>
+            <joint name="corsa_cilindro_dx" type="slide" axis="0 0 -1" range="0 0.57" limited="true" damping="20" frictionloss="5"/>
             <inertial pos="0 0 1.20" mass="0.8" diaginertia="0.018 0.018 0.003"/>
             <geom name="stelo_visual_dx" type="cylinder" pos="0 0 1.20" size="0.022 0.43" rgba="0.85 0.85 0.85 1" contype="0" conaffinity="0"/>
             <site name="punta_stelo_dx" pos="0 0 1.637" size="0.035" rgba="0 1 0 1"/>
@@ -92,7 +92,7 @@
   </equality>
 
   <actuator>
-    <motor name="forza_pneumatica_sx" joint="corsa_cilindro_sx" gear="1" ctrllimited="true" ctrlrange="-700 700"/>
-    <motor name="forza_pneumatica_dx" joint="corsa_cilindro_dx" gear="1" ctrllimited="true" ctrlrange="-700 700"/>
+    <motor name="forza_pneumatica_sx" joint="corsa_cilindro_sx" gear="1" ctrllimited="true" ctrlrange="-100 100"/>
+    <motor name="forza_pneumatica_dx" joint="corsa_cilindro_dx" gear="1" ctrllimited="true" ctrlrange="-100 100"/>
   </actuator>
 </mujoco>

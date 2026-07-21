@@ -23,7 +23,7 @@
             <geom name="canna_visual" type="cylinder" pos="0 0 0.38" size="0.025 0.38" rgba="0.15 0.15 0.15 1" contype="0" conaffinity="0"/>
 
             <body name="stelo_cilindro" pos="0 0 0">
-            <joint name="corsa_cilindro" type="slide" axis="0 0 1" range="0 0.50" limited="true" damping="20" frictionloss="5"/>
+            <joint name="corsa_cilindro" type="slide" axis="0 0 1" range="0 0.51" limited="true" damping="20" frictionloss="5"/>
             <inertial pos="0 0 0.41" mass="0.35" diaginertia="0.006 0.006 0.001"/>
 
             <!-- geom leggermente allungato per coprire il nuovo punto di aggancio a 0.786 -->
@@ -59,7 +59,7 @@
   </equality>
 
   <actuator>
-    <motor name="forza_pneumatica" joint="corsa_cilindro" gear="1" ctrllimited="true" ctrlrange="-700 700"/>
+    <motor name="forza_pneumatica" joint="corsa_cilindro" gear="1" ctrllimited="true" ctrlrange="-100 100"/>
   </actuator>
 
   <!-- Sensori -->

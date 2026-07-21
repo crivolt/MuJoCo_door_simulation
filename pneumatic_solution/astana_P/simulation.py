@@ -13,8 +13,6 @@ data = mujoco.MjData(model)
 # FUNCTION TO GET MODEL IDS
 def get_id(obj_type, name):
     obj_id = mujoco.mj_name2id(model, obj_type, name)
-    if obj_id == -1:
-        raise ValueError(f"Elemento non trovato nel modello: {name}")
     return obj_id
 
 
@@ -74,21 +72,24 @@ OPEN_DEG_DX = 62.0
 OPEN_RAD_SX = np.deg2rad(OPEN_DEG_SX)
 OPEN_RAD_DX = np.deg2rad(OPEN_DEG_DX)
 
-T_OPEN_SX = 1.0
-T_WAIT_OPEN_TO_CLOSE_SX = 4.0
-T_CLOSE_SX = 1.0
+# Timeout di sicurezza per ogni fase di movimento (evita loop infiniti se il
+# sistema non converge mai, es. per forza insufficiente o guadagni sbagliati)
+T_OPEN_SX_TIMEOUT = 1.0
+T_CLOSE_SX_TIMEOUT = 1.0
 
+T_OPEN_DX_TIMEOUT = 1.0
+T_CLOSE_DX_TIMEOUT = 1.0
+
+T_WAIT_SX_OPEN = 4.0
 T_WAIT_BETWEEN_APERTURES = 3.0
-
-T_OPEN_DX = 1.0
-T_WAIT_OPEN_TO_CLOSE_DX = 4.0
-T_CLOSE_DX = 1.0
-
+T_WAIT_DX_OPEN = 4.0
 T_WAIT_CLOSED_END = 5.0
 
-F_MAX_SX = 700.0
-F_MAX_DX = 700.0
+F_MAX_SX = 100.0
+F_MAX_DX = 100.0
 
+# Guadagni PD: D vicino al valore di smorzamento critico rispetto a K
+# (aumentare D se il movimento oscilla/rimbalza, aumentare K se troppo lento)
 K_OPEN_SX = 2000.0
 D_OPEN_SX = 150.0
 
@@ -112,6 +113,10 @@ FRICTION_MOVING_SX = 6.0
 
 FRICTION_CLOSED_DX = 22.85
 FRICTION_MOVING_DX = 6.0
+
+# Soglie di convergenza per considerare "arrivata" la porta a fine fase
+ANGLE_TOL = np.deg2rad(0.5)   # tolleranza angolare
+VEL_TOL = 0.02                # tolleranza sulla velocita' angolare (rad/s)
 
 
 # STATE MACHINE
@@ -147,12 +152,6 @@ log_force_dx = []
 
 log_snodo_base_sx_quat = []
 log_snodo_base_dx_quat = []
-
-
-# POLYNOMIAL PROFILE
-def smoothstep(s):
-    s = np.clip(s, 0.0, 1.0)
-    return 3.0 * s**2 - 2.0 * s**3
 
 
 # TEST ACTUATOR DIRECTION
@@ -243,8 +242,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         # OPEN LEFT DOOR
         if phase == OPEN_SX:
 
-            s = smoothstep(phase_timer / T_OPEN_SX)
-            theta_des_sx = phase_start_angle_sx + s * (OPEN_RAD_SX - phase_start_angle_sx)
+            theta_des_sx = OPEN_RAD_SX
             theta_des_dx = 0.0
 
             model.dof_frictionloss[door_sx_dofadr] = FRICTION_CLOSED_SX if abs(door_sx_angle) < np.deg2rad(1.0) else FRICTION_MOVING_SX
@@ -253,7 +251,9 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             force_sx = pd_force(theta_des_sx, door_sx_angle, door_sx_vel, OPEN_SIGN_SX, K_OPEN_SX, D_OPEN_SX, F_MAX_SX)
             force_dx = pd_force(theta_des_dx, door_dx_angle, door_dx_vel, OPEN_SIGN_DX, K_HOLD_DX, D_HOLD_DX, F_MAX_DX)
 
-            if phase_timer >= T_OPEN_SX:
+            error_sx = theta_des_sx - door_sx_angle
+            converged = abs(error_sx) < ANGLE_TOL and abs(door_sx_vel) < VEL_TOL
+            if converged or phase_timer >= T_OPEN_SX_TIMEOUT:
                 set_phase(WAIT_SX_OPEN)
                 print("Phase: WAIT_SX_OPEN")
 
@@ -270,7 +270,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             force_sx = pd_force(theta_des_sx, door_sx_angle, door_sx_vel, OPEN_SIGN_SX, K_HOLD_SX, D_HOLD_SX, F_MAX_SX)
             force_dx = pd_force(theta_des_dx, door_dx_angle, door_dx_vel, OPEN_SIGN_DX, K_HOLD_DX, D_HOLD_DX, F_MAX_DX)
 
-            if phase_timer >= T_WAIT_OPEN_TO_CLOSE_SX:
+            if phase_timer >= T_WAIT_SX_OPEN:
                 set_phase(CLOSE_SX)
                 print("Phase: CLOSE_SX")
 
@@ -278,8 +278,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         # CLOSE LEFT DOOR
         elif phase == CLOSE_SX:
 
-            s = smoothstep(phase_timer / T_CLOSE_SX)
-            theta_des_sx = phase_start_angle_sx + s * (0.0 - phase_start_angle_sx)
+            theta_des_sx = 0.0
             theta_des_dx = 0.0
 
             model.dof_frictionloss[door_sx_dofadr] = FRICTION_MOVING_SX
@@ -288,7 +287,9 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             force_sx = pd_force(theta_des_sx, door_sx_angle, door_sx_vel, OPEN_SIGN_SX, K_CLOSE_SX, D_CLOSE_SX, F_MAX_SX)
             force_dx = pd_force(theta_des_dx, door_dx_angle, door_dx_vel, OPEN_SIGN_DX, K_HOLD_DX, D_HOLD_DX, F_MAX_DX)
 
-            if phase_timer >= T_CLOSE_SX:
+            error_sx = theta_des_sx - door_sx_angle
+            converged = abs(error_sx) < ANGLE_TOL and abs(door_sx_vel) < VEL_TOL
+            if converged or phase_timer >= T_CLOSE_SX_TIMEOUT:
                 set_phase(WAIT_BETWEEN)
                 print("Phase: WAIT_BETWEEN")
 
@@ -313,9 +314,8 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         # OPEN RIGHT DOOR
         elif phase == OPEN_DX:
 
-            s = smoothstep(phase_timer / T_OPEN_DX)
             theta_des_sx = 0.0
-            theta_des_dx = phase_start_angle_dx + s * (OPEN_RAD_DX - phase_start_angle_dx)
+            theta_des_dx = OPEN_RAD_DX
 
             model.dof_frictionloss[door_sx_dofadr] = FRICTION_CLOSED_SX
             model.dof_frictionloss[door_dx_dofadr] = FRICTION_CLOSED_DX if abs(door_dx_angle) < np.deg2rad(1.0) else FRICTION_MOVING_DX
@@ -323,7 +323,9 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             force_sx = pd_force(theta_des_sx, door_sx_angle, door_sx_vel, OPEN_SIGN_SX, K_HOLD_SX, D_HOLD_SX, F_MAX_SX)
             force_dx = pd_force(theta_des_dx, door_dx_angle, door_dx_vel, OPEN_SIGN_DX, K_OPEN_DX, D_OPEN_DX, F_MAX_DX)
 
-            if phase_timer >= T_OPEN_DX:
+            error_dx = theta_des_dx - door_dx_angle
+            converged = abs(error_dx) < ANGLE_TOL and abs(door_dx_vel) < VEL_TOL
+            if converged or phase_timer >= T_OPEN_DX_TIMEOUT:
                 set_phase(WAIT_DX_OPEN)
                 print("Phase: WAIT_DX_OPEN")
 
@@ -340,7 +342,7 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             force_sx = pd_force(theta_des_sx, door_sx_angle, door_sx_vel, OPEN_SIGN_SX, K_HOLD_SX, D_HOLD_SX, F_MAX_SX)
             force_dx = pd_force(theta_des_dx, door_dx_angle, door_dx_vel, OPEN_SIGN_DX, K_HOLD_DX, D_HOLD_DX, F_MAX_DX)
 
-            if phase_timer >= T_WAIT_OPEN_TO_CLOSE_DX:
+            if phase_timer >= T_WAIT_DX_OPEN:
                 set_phase(CLOSE_DX)
                 print("Phase: CLOSE_DX")
 
@@ -348,9 +350,8 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         # CLOSE RIGHT DOOR
         elif phase == CLOSE_DX:
 
-            s = smoothstep(phase_timer / T_CLOSE_DX)
             theta_des_sx = 0.0
-            theta_des_dx = phase_start_angle_dx + s * (0.0 - phase_start_angle_dx)
+            theta_des_dx = 0.0
 
             model.dof_frictionloss[door_sx_dofadr] = FRICTION_CLOSED_SX
             model.dof_frictionloss[door_dx_dofadr] = FRICTION_MOVING_DX
@@ -358,7 +359,9 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
             force_sx = pd_force(theta_des_sx, door_sx_angle, door_sx_vel, OPEN_SIGN_SX, K_HOLD_SX, D_HOLD_SX, F_MAX_SX)
             force_dx = pd_force(theta_des_dx, door_dx_angle, door_dx_vel, OPEN_SIGN_DX, K_CLOSE_DX, D_CLOSE_DX, F_MAX_DX)
 
-            if phase_timer >= T_CLOSE_DX:
+            error_dx = theta_des_dx - door_dx_angle
+            converged = abs(error_dx) < ANGLE_TOL and abs(door_dx_vel) < VEL_TOL
+            if converged or phase_timer >= T_CLOSE_DX_TIMEOUT:
                 set_phase(WAIT_CLOSED_END)
                 print("Phase: WAIT_CLOSED_END")
 

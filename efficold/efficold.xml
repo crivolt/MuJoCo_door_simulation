@@ -2,7 +2,7 @@
 <mujoco model="Test_efficold">
 
     <option timestep="0.002" gravity="0 0 -9.81"/>
-
+    
     <include file="universal_robots_ur10e/ur10e.xml"/>
 
     <asset>
