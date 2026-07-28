@@ -46,8 +46,8 @@ OPEN_RAD = np.deg2rad(OPEN_DEG)
 
 # Timeout di sicurezza per ogni fase di movimento (evita loop infiniti se il
 # sistema non converge mai, es. per forza insufficiente o guadagni sbagliati)
-T_OPEN_TIMEOUT = 5.0
-T_CLOSE_TIMEOUT = 5.0
+T_OPEN_TIMEOUT = 1.0
+T_CLOSE_TIMEOUT = 1.0
 
 T_WAIT_OPEN = 4.0
 T_WAIT_CLOSED = 5.0

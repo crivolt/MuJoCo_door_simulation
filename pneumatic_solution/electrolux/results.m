@@ -21,35 +21,36 @@ joint_y = rad2deg(joint_angles(:, 2));
 joint_z = rad2deg(joint_angles(:, 3));
 
 
+
 % Figure 1 - Door opening angle
 figure("Name", "Door opening angle")
 plot(t, door_angle, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Door angle [deg]")
-title("Door Opening Angle Over Time")
-legend("Door", "Location", "best")
-
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Door angle [deg]", "FontSize", 30)
+title("Door Opening Angle Over Time", "FontSize", 36)
+legend("Door", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 % Figure 2 - Cylinder extension
 figure("Name", "Cylinder extension")
 plot(t, cylinder_extension, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Cylinder extension [m]")
-title("Cylinder Extension Over Time")
-legend("Cylinder", "Location", "best")
-
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Cylinder extension [m]", "FontSize", 30)
+title("Cylinder Extension Over Time", "FontSize", 36)
+legend("Cylinder", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 % Figure 3 - Door angular velocity
 figure("Name", "Door angular velocity")
 plot(t, door_velocity, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Door angular velocity [deg/s]")
-title("Door Angular Velocity Over Time")
-legend("Door", "Location", "best")
-
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Door angular velocity [deg/s]", "FontSize", 30)
+title("Door Angular Velocity Over Time", "FontSize", 36)
+legend("Door", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 % Figure 4 - Base joint rotation components
 figure("Name", "Base joint rotation components")
@@ -58,10 +59,11 @@ hold on
 plot(t, joint_y, "LineWidth", 1.5)
 plot(t, joint_z, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Rotation [deg]")
-title("Base Joint Rotation Components")
-legend("Rotation about X", "Rotation about Y", "Rotation about Z", "Location", "best")
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Rotation [deg]", "FontSize", 30)
+title("Base Joint Rotation Components", "FontSize", 36)
+legend("Rotation about X", "Rotation about Y", "Rotation about Z", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 
 % Figure 5 - Complete overview

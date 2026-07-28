@@ -32,17 +32,17 @@ joint_y_dx = rad2deg(joint_angles_dx(:, 2));
 joint_z_dx = rad2deg(joint_angles_dx(:, 3));
 
 
-% Figure 1 - Door position
-figure("Name", "Door position")
+% Figure 1 - Door opening angle
+figure("Name", "Door opening angle")
 plot(t, door_sx, "LineWidth", 1.5)
 hold on
 plot(t, door_dx, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Door position [m]")
-title("Door Position Over Time")
-legend("Left door", "Right door", "Location", "best")
-
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Door angle [deg]", "FontSize", 30)
+title("Door Opening Angle Over Time", "FontSize", 36)
+legend("Left door", "Right door", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 % Figure 2 - Cylinder extension
 figure("Name", "Cylinder extension")
@@ -50,48 +50,39 @@ plot(t, cyl_sx, "LineWidth", 1.5)
 hold on
 plot(t, cyl_dx, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Cylinder extension [m]")
-title("Cylinder Extension Over Time")
-legend("Left cylinder", "Right cylinder", "Location", "best")
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Cylinder extension [m]", "FontSize", 30)
+title("Cylinder Extension Over Time", "FontSize", 36)
+legend("Left cylinder", "Right cylinder", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
-
-% Figure 3 - Door velocity
-figure("Name", "Door velocity")
+% Figure 3 - Door angular velocity
+figure("Name", "Door angular velocity")
 plot(t, vel_sx, "LineWidth", 1.5)
 hold on
 plot(t, vel_dx, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Door velocity [m/s]")
-title("Door Velocity Over Time")
-legend("Left door", "Right door", "Location", "best")
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Door angular velocity [deg/s]", "FontSize", 30)
+title("Door Angular Velocity Over Time", "FontSize", 36)
+legend("Left door", "Right door", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
-
-% Figure 4 - Left joint rotation components
-figure("Name", "Left joint rotation components")
+% Figure 4 - Base joint rotation components (Left and Right)
+figure("Name", "Base joint rotation components")
 plot(t, joint_x_sx, "LineWidth", 1.5)
 hold on
 plot(t, joint_y_sx, "LineWidth", 1.5)
 plot(t, joint_z_sx, "LineWidth", 1.5)
+plot(t, joint_x_dx, "--", "LineWidth", 1.5)
+plot(t, joint_y_dx, "--", "LineWidth", 1.5)
+plot(t, joint_z_dx, "--", "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Rotation [deg]")
-title("Left Joint Rotation Components")
-legend("Rotation about X", "Rotation about Y", "Rotation about Z", "Location", "best")
-
-
-% Figure 5 - Right joint rotation components
-figure("Name", "Right joint rotation components")
-plot(t, joint_x_dx, "LineWidth", 1.5)
-hold on
-plot(t, joint_y_dx, "LineWidth", 1.5)
-plot(t, joint_z_dx, "LineWidth", 1.5)
-grid on
-xlabel("Time [s]")
-ylabel("Rotation [deg]")
-title("Right Joint Rotation Components")
-legend("Rotation about X", "Rotation about Y", "Rotation about Z", "Location", "best")
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Rotation [deg]", "FontSize", 30)
+title("End-effector Joint Rotation Components (Left vs Right)", "FontSize", 36)
+legend("X - Left", "Y - Left", "Z - Left", "X - Right", "Y - Right", "Z - Right", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 
 % Figure 6 - Complete overview

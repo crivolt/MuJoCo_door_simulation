@@ -68,7 +68,7 @@ mujoco.mj_forward(model, data)
 OPEN_DISTANCE = 0.7
 
 T_OPEN = 1.0
-T_WAIT_OPEN = 4.0
+T_WAIT_OPEN = 13.0
 T_CLOSE = 1.0
 T_WAIT_CLOSED = 2.0
 

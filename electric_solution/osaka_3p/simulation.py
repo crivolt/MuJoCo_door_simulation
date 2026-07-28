@@ -73,7 +73,7 @@ OPEN_RAD_DX = np.deg2rad(OPEN_DEG)
 OPEN_RAD_SX = -np.deg2rad(OPEN_DEG)
 
 T_OPEN = 1.0
-T_WAIT_OPEN = 4.0
+T_WAIT_OPEN = 13.0
 T_CLOSE = 1.0
 T_WAIT_CLOSED = 2.0
 

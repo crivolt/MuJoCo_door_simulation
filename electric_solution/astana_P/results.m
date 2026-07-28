@@ -28,11 +28,11 @@ plot(t, door_pos_sx, "LineWidth", 1.5)
 hold on
 plot(t, door_pos_dx, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Door angle [deg]")
-title("Door Position Over Time")
-legend("Door SX", "Door DX", "Location", "best")
-
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Door angle [deg]", "FontSize", 30)
+title("Door Position Over Time", "FontSize", 36)
+legend("Door SX", "Door DX", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 % Figure 2 - Door velocity
 figure("Name", "Door velocity")
@@ -40,11 +40,11 @@ plot(t, door_vel_sx, "LineWidth", 1.5)
 hold on
 plot(t, door_vel_dx, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Door velocity [deg/s]")
-title("Door Velocity Over Time")
-legend("Door SX", "Door DX", "Location", "best")
-
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Door velocity [deg/s]", "FontSize", 30)
+title("Door Velocity Over Time", "FontSize", 36)
+legend("Door SX", "Door DX", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 % Figure 3 - Gearmotor position
 figure("Name", "Gearmotor position")
@@ -52,11 +52,11 @@ plot(t, motor_pos_sx, "LineWidth", 1.5)
 hold on
 plot(t, motor_pos_dx, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Motor angle [deg]")
-title("Gearmotor Position Over Time")
-legend("Motor SX", "Motor DX", "Location", "best")
-
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Motor angle [deg]", "FontSize", 30)
+title("Gearmotor Position Over Time", "FontSize", 36)
+legend("Motor SX", "Motor DX", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 % Figure 4 - Radial alignment correction
 figure("Name", "Radial alignment correction")
@@ -64,11 +64,11 @@ plot(t, comp_radial_sx, "LineWidth", 1.5)
 hold on
 plot(t, comp_radial_dx, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Radial correction [mm]")
-title("Radial Alignment Correction Over Time")
-legend("Radial correction SX", "Radial correction DX", "Location", "best")
-
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Radial correction [mm]", "FontSize", 30)
+title("Radial Alignment Correction Over Time", "FontSize", 36)
+legend("Radial correction SX", "Radial correction DX", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 % Figure 5 - Alignment joint rotation
 figure("Name", "Alignment joint rotation")
@@ -76,10 +76,11 @@ plot(t, align_rot_sx, "LineWidth", 1.5)
 hold on
 plot(t, align_rot_dx, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Rotation [deg]")
-title("Alignment Joint Rotation Over Time")
-legend("Alignment SX", "Alignment DX", "Location", "best")
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Rotation [deg]", "FontSize", 30)
+title("Alignment Joint Rotation Over Time", "FontSize", 36)
+legend("Alignment SX", "Alignment DX", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 
 % Figure 6 - Complete overview

@@ -18,7 +18,7 @@ Y_cerchio = Yc + R * cos(theta);
 Z_cerchio = Zc + R * sin(theta);
 
 % Create figure
-figure('Units', 'centimeters', 'Position', [2 2 14 11], 'Color', 'w');
+figure('Units', 'centimeters', 'Position', [2 2 18 14], 'Color', 'w');
 
 hold on;
 grid on;
@@ -34,17 +34,17 @@ plot3(X(end), Y(end), Z(end), 'ro', 'MarkerSize', 14, 'MarkerFaceColor', 'r', 'L
 
 % Axis appearance
 ax = gca;
-ax.FontSize = 20;
-ax.LineWidth = 1.5;
+ax.FontSize = 28;
+ax.LineWidth = 2.0;
 
 % Labels and title
-xlabel('X (m)', 'FontSize', 25, 'FontWeight', 'bold');
-ylabel('Y (m)', 'FontSize', 25, 'FontWeight', 'bold');
-zlabel('Z (m)', 'FontSize', 25, 'FontWeight', 'bold');
-title('Trajectory', 'FontSize', 30, 'FontWeight', 'bold');
+xlabel('X (m)', 'FontSize', 32, 'FontWeight', 'bold');
+ylabel('Y (m)', 'FontSize', 32, 'FontWeight', 'bold');
+zlabel('Z (m)', 'FontSize', 32, 'FontWeight', 'bold');
+title('Trajectory', 'FontSize', 36, 'FontWeight', 'bold');
 
 % Legend
-legend('Trajectory', 'Ideal Circumference', 'Start', 'End', 'FontSize', 20, 'Location', 'northeast', 'Box', 'on');
+legend('Trajectory', 'Ideal Circumference', 'Start', 'End', 'FontSize', 28, 'Location', 'northeast', 'Box', 'on');
 
 axis equal;
 

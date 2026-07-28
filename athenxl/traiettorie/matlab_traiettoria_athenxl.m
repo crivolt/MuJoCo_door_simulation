@@ -1,12 +1,12 @@
 % Load data
-dati = readmatrix('/Users/cristianvoltan/Desktop/unipd/tirocinio/CAD/athenxl/traiettorie/traiettoria_destra.csv');
+dati = readmatrix('/Users/cristianvoltan/Desktop/unipd/tirocinio/CAD/athenxl/traiettorie/traiettoria_sinistra.csv');
 
 X = dati(:, 1);
 Y = dati(:, 2);
 Z = dati(:, 3);
 
 % 3d plot
-figure ('Units', 'centimeters', 'Position', [2 2 14 11], 'Color', 'w');
+figure ('Units', 'centimeters', 'Position', [2 2 18 14], 'Color', 'w');
 hold on;
 grid on;
 box on;
@@ -17,15 +17,15 @@ plot3(X(1), Y(1), Z(1), 'go', 'MarkerSize', 14, 'MarkerFaceColor', 'g', 'LineWid
 plot3(X(end), Y(end), Z(end), 'ro', 'MarkerSize', 14, 'MarkerFaceColor', 'r', 'LineWidth', 1.2); % Fine (Rosso)
 
 ax = gca;
-ax.FontSize = 20;
-ax.LineWidth = 1.5;
+ax.FontSize = 28;
+ax.LineWidth = 2.0;
 
 % Labels and title
-xlabel('X (m)', 'FontSize', 25, 'FontWeight', 'bold');
-ylabel('Y (m)', 'FontSize', 25, 'FontWeight', 'bold');
-zlabel('Z (m)', 'FontSize', 25, 'FontWeight', 'bold');
-title('Trajectory', 'FontSize', 30, 'FontWeight', 'bold');
-legend('Trajectory', 'Start', 'End', 'FontSize', 20, 'Location', 'northeast', 'Box', 'on');
+xlabel('X (m)', 'FontSize', 32, 'FontWeight', 'bold');
+ylabel('Y (m)', 'FontSize', 32, 'FontWeight', 'bold');
+zlabel('Z (m)', 'FontSize', 32, 'FontWeight', 'bold');
+title('Trajectory', 'FontSize', 36, 'FontWeight', 'bold');
+legend('Trajectory', 'Start', 'End', 'FontSize', 28, 'Location', 'northeast', 'Box', 'on');
 axis equal;
 
 view(3)

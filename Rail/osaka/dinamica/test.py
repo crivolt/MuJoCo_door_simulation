@@ -245,7 +245,7 @@ gain_approach = 0.005
 
 CLOSE_DURATION          = 500
 STALL_LIMIT             = 2000
-WAIT_BEFORE_CLOSE_STEPS = int(4.0 / model.opt.timestep)
+WAIT_BEFORE_CLOSE_STEPS = int(13.0 / model.opt.timestep)
 
 
 #  VARIABLES

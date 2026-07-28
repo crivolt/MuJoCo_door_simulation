@@ -1,6 +1,4 @@
-clear
-clc
-close all
+clear; clc; close all;
 
 % Load data
 data = load("/Users/cristianvoltan/Desktop/unipd/tirocinio/CAD/electric_solution/electrolux/dati_porta_meccanica_electrolux.mat");
@@ -15,28 +13,31 @@ align_rot = data.rotazione_allineamento_deg(:);
 figure("Name", "Door position")
 plot(t, door_pos, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Door angle [deg]")
-title("Door Position Over Time")
-legend("Door", "Location", "best")
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Door angle [deg]", "FontSize", 30)
+title("Door Position Over Time", "FontSize", 36)
+legend("Door", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 % Figure 2 - Door velocity
 figure("Name", "Door velocity")
 plot(t, door_vel, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Door velocity [deg/s]")
-title("Door Velocity Over Time")
-legend("Door", "Location", "best")
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Door velocity [deg/s]", "FontSize", 30)
+title("Door Velocity Over Time", "FontSize", 36)
+legend("Door", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 % Figure 3 - Gearmotor position
 figure("Name", "Gearmotor position")
 plot(t, motor_pos, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Motor angle [deg]")
-title("Gearmotor Position Over Time")
-legend("Motor", "Location", "best")
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Motor angle [deg]", "FontSize", 30)
+title("Gearmotor Position Over Time", "FontSize", 36)
+legend("Motor", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 % Figure 4 - Alignment corrections
 figure("Name", "Alignment corrections")
@@ -44,10 +45,11 @@ plot(t, comp_radial, "LineWidth", 1.5)
 hold on
 plot(t, align_rot, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]")
-ylabel("Correction")
-title("Alignment Corrections Over Time")
-legend("Radial correction [mm]", "Rotation [deg]", "Location", "best")
+xlabel("Time [s]", "FontSize", 30)
+ylabel("Correction", "FontSize", 30)
+title("Alignment Corrections Over Time", "FontSize", 36)
+legend("Radial correction [mm]", "Rotation [deg]", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 25)
 
 % Figure 5 - Complete overview
 figure("Name", "Complete overview")
