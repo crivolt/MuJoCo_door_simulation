@@ -48,13 +48,13 @@ end
 % FIGURE 1 - DOOR OPENING (SX + DX)
 % ══════════════════════════════
 figure("Name", "Door opening position")
-plot(tempo, apertura_sx_full, 'LineWidth', 1.5)
+plot(tempo, apertura_sx_full, 'LineWidth', 3.0)
 hold on
-plot(tempo, apertura_dx_full, 'LineWidth', 1.5)
+plot(tempo, apertura_dx_full, 'LineWidth', 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
-ylabel("Door opening [m]", "FontSize", 30)
-title("Door Opening Position Over Time", "FontSize", 36)
+ylabel("Door position [m]", "FontSize", 30)
+title("Door Opening Over Time", "FontSize", 36)
 legend("Door SX", "Door DX", "Location", "best", "FontSize", 30)
 set(gca, "FontSize", 25)
 
@@ -62,13 +62,13 @@ set(gca, "FontSize", 25)
 % FIGURE 2 - LINEAR VELOCITY (SX + DX)
 % ══════════════════════════════
 figure("Name", "Door linear velocity")
-plot(tempo, velocita_sx_full, 'LineWidth', 1.5)
+plot(tempo, velocita_sx_full, 'LineWidth', 3.0)
 hold on
-plot(tempo, velocita_dx_full, 'LineWidth', 1.5)
+plot(tempo, velocita_dx_full, 'LineWidth', 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
-ylabel("Linear velocity [m/s]", "FontSize", 30)
-title("Door Linear Velocity Over Time", "FontSize", 36)
+ylabel("Door velocity [m/s]", "FontSize", 30)
+title("Door Velocity Over Time", "FontSize", 36)
 legend("Door SX", "Door DX", "Location", "best", "FontSize", 30)
 set(gca, "FontSize", 25)
 
@@ -81,12 +81,12 @@ tau_dx = tau(idx_dx,:);
 
 subplot(2,1,1)
 hold on
-plot(t_sx, tau_sx(:,1), 'Color', c1, 'LineWidth', 1.2)
-plot(t_sx, tau_sx(:,2), 'Color', c2, 'LineWidth', 1.2)
-plot(t_sx, tau_sx(:,3), 'Color', c3, 'LineWidth', 1.2)
-plot(t_sx, tau_sx(:,4), 'Color', c4, 'LineWidth', 1.2)
-plot(t_sx, tau_sx(:,5), 'Color', c5, 'LineWidth', 1.2)
-plot(t_sx, tau_sx(:,6), 'Color', c6, 'LineWidth', 1.2)
+plot(t_sx, tau_sx(:,1), 'Color', c1, 'LineWidth', 3.0)
+plot(t_sx, tau_sx(:,2), 'Color', c2, 'LineWidth', 3.0)
+plot(t_sx, tau_sx(:,3), 'Color', c3, 'LineWidth', 3.0)
+plot(t_sx, tau_sx(:,4), 'Color', c4, 'LineWidth', 3.0)
+plot(t_sx, tau_sx(:,5), 'Color', c5, 'LineWidth', 3.0)
+plot(t_sx, tau_sx(:,6), 'Color', c6, 'LineWidth', 3.0)
 for i = 1:6
     if i <= 2
         limColor = darkGreen;
@@ -95,8 +95,8 @@ for i = 1:6
     else
         limColor = redLine;
     end
-    yline( limits(i), '--', 'Color', limColor, 'LineWidth', 1)
-    yline(-limits(i), '--', 'Color', limColor, 'LineWidth', 1)
+    yline( limits(i), '--', 'Color', limColor, 'LineWidth', 2.0)
+    yline(-limits(i), '--', 'Color', limColor, 'LineWidth', 2.0)
 end
 xlabel("Time [s]", "FontSize", 30)
 ylabel("Joint torque [Nm]", "FontSize", 30)
@@ -104,16 +104,17 @@ title("Joint Torques - Door SX", "FontSize", 36)
 legend("J1","J2","J3","J4","J5","J6", "Location", "best", "FontSize", 30)
 grid on
 xlim([min(t_sx), max(t_sx)])
+ylim([-335 335])
 set(gca, "FontSize", 25)
 
 subplot(2,1,2)
 hold on
-plot(t_dx, tau_dx(:,1), 'Color', c1, 'LineWidth', 1.2)
-plot(t_dx, tau_dx(:,2), 'Color', c2, 'LineWidth', 1.2)
-plot(t_dx, tau_dx(:,3), 'Color', c3, 'LineWidth', 1.2)
-plot(t_dx, tau_dx(:,4), 'Color', c4, 'LineWidth', 1.2)
-plot(t_dx, tau_dx(:,5), 'Color', c5, 'LineWidth', 1.2)
-plot(t_dx, tau_dx(:,6), 'Color', c6, 'LineWidth', 1.2)
+plot(t_dx, tau_dx(:,1), 'Color', c1, 'LineWidth', 3.0)
+plot(t_dx, tau_dx(:,2), 'Color', c2, 'LineWidth', 3.0)
+plot(t_dx, tau_dx(:,3), 'Color', c3, 'LineWidth', 3.0)
+plot(t_dx, tau_dx(:,4), 'Color', c4, 'LineWidth', 3.0)
+plot(t_dx, tau_dx(:,5), 'Color', c5, 'LineWidth', 3.0)
+plot(t_dx, tau_dx(:,6), 'Color', c6, 'LineWidth', 3.0)
 for i = 1:6
     if i <= 2
         limColor = darkGreen;
@@ -122,8 +123,8 @@ for i = 1:6
     else
         limColor = redLine;
     end
-    yline( limits(i), '--', 'Color', limColor, 'LineWidth', 1)
-    yline(-limits(i), '--', 'Color', limColor, 'LineWidth', 1)
+    yline( limits(i), '--', 'Color', limColor, 'LineWidth', 2.0)
+    yline(-limits(i), '--', 'Color', limColor, 'LineWidth', 2.0)
 end
 xlabel("Time [s]", "FontSize", 30)
 ylabel("Joint torque [Nm]", "FontSize", 30)
@@ -131,6 +132,7 @@ title("Joint Torques - Door DX", "FontSize", 36)
 legend("J1","J2","J3","J4","J5","J6", "Location", "best", "FontSize", 30)
 grid on
 xlim([min(t_dx), max(t_dx)])
+ylim([-335 335])
 set(gca, "FontSize", 25)
 
 % ══════════════════════════════
@@ -138,7 +140,7 @@ set(gca, "FontSize", 25)
 % ══════════════════════════════
 if exist('slitta', 'var')
     figure("Name", "Slitta position")
-    plot(tempo, slitta, 'LineWidth', 1.5)
+    plot(tempo, slitta, 'LineWidth', 3.0)
     grid on
     xlabel("Time [s]", "FontSize", 30)
     ylabel("Slitta position [m]", "FontSize", 30)

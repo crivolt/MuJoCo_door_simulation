@@ -23,10 +23,10 @@ redLine   = [0.85 0 0];  % limiti J4-J6 (rosso)
 % FIGURE 1 - DOOR OPENING ANGLE
 % ══════════════════════════════
 figure("Name", "Door opening angle")
-plot(tempo, apertura, 'LineWidth', 1.5)
+plot(tempo, apertura, 'LineWidth', 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
-ylabel("Door opening [deg]", "FontSize", 30)
+ylabel("Door angle [deg]", "FontSize", 30)
 title("Door Opening Angle Over Time", "FontSize", 36)
 set(gca, "FontSize", 25)
 
@@ -34,10 +34,10 @@ set(gca, "FontSize", 25)
 % FIGURE 2 - ANGULAR VELOCITY
 % ══════════════════════════════
 figure("Name", "Door angular velocity")
-plot(tempo, velocita, 'LineWidth', 1.5)
+plot(tempo, velocita, 'LineWidth', 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
-ylabel("Angular velocity [deg/s]", "FontSize", 30)
+ylabel("Door angular velocity [deg/s]", "FontSize", 30)
 title("Door Angular Velocity Over Time", "FontSize", 36)
 set(gca, "FontSize", 25)
 
@@ -46,12 +46,12 @@ set(gca, "FontSize", 25)
 % ══════════════════════════════
 figure("Name", "Joint torques")
 hold on
-plot(tempo, tau(:,1), 'Color', c1, 'LineWidth', 1.2)
-plot(tempo, tau(:,2), 'Color', c2, 'LineWidth', 1.2)
-plot(tempo, tau(:,3), 'Color', c3, 'LineWidth', 1.2)
-plot(tempo, tau(:,4), 'Color', c4, 'LineWidth', 1.2)
-plot(tempo, tau(:,5), 'Color', c5, 'LineWidth', 1.2)
-plot(tempo, tau(:,6), 'Color', c6, 'LineWidth', 1.2)
+plot(tempo, tau(:,1), 'Color', c1, 'LineWidth', 3.0)
+plot(tempo, tau(:,2), 'Color', c2, 'LineWidth', 3.0)
+plot(tempo, tau(:,3), 'Color', c3, 'LineWidth', 3.0)
+plot(tempo, tau(:,4), 'Color', c4, 'LineWidth', 3.0)
+plot(tempo, tau(:,5), 'Color', c5, 'LineWidth', 3.0)
+plot(tempo, tau(:,6), 'Color', c6, 'LineWidth', 3.0)
 
 for i = 1:6
     if i <= 2
@@ -61,8 +61,8 @@ for i = 1:6
     else
         limColor = redLine;
     end
-    yline( limits(i), '--', 'Color', limColor, 'LineWidth', 1)
-    yline(-limits(i), '--', 'Color', limColor, 'LineWidth', 1)
+    yline( limits(i), '--', 'Color', limColor, 'LineWidth', 2.0)
+    yline(-limits(i), '--', 'Color', limColor, 'LineWidth', 2.0)
 end
 
 xlabel("Time [s]", "FontSize", 30)
@@ -71,6 +71,7 @@ title("Joint Torques", "FontSize", 36)
 legend("J1","J2","J3","J4","J5","J6", "Location", "best", "FontSize", 30)
 grid on
 xlim([min(tempo), max(tempo)])
+ylim([-335 335])
 set(gca, "FontSize", 25)
 
 % load("/Users/cristianvoltan/Desktop/unipd/tirocinio/CAD/electrolux/dinamica/dati_porta_franka.mat")

@@ -34,13 +34,13 @@ joint_z_dx = rad2deg(joint_angles_dx(:, 3));
 
 % Figure 1 - Door opening angle
 figure("Name", "Door opening angle")
-plot(t, door_sx, "LineWidth", 1.5)
+plot(t, door_sx, "LineWidth", 3.0)
 hold on
-plot(t, door_dx, "LineWidth", 1.5)
+plot(t, door_dx, "LineWidth", 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
-ylabel("Door angle [deg]", "FontSize", 30)
-title("Door Opening Angle Over Time", "FontSize", 36)
+ylabel("Door Position [m]", "FontSize", 30)
+title("Door Opening Over Time", "FontSize", 36)
 legend("Left door", "Right door", "Location", "best", "FontSize", 30)
 set(gca, "FontSize", 25)
 
@@ -57,26 +57,26 @@ legend("Left cylinder", "Right cylinder", "Location", "best", "FontSize", 30)
 set(gca, "FontSize", 25)
 
 % Figure 3 - Door angular velocity
-figure("Name", "Door angular velocity")
-plot(t, vel_sx, "LineWidth", 1.5)
+figure("Name", "Door velocity")
+plot(t, vel_sx, "LineWidth", 3.0)
 hold on
-plot(t, vel_dx, "LineWidth", 1.5)
+plot(t, vel_dx, "LineWidth", 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
-ylabel("Door angular velocity [deg/s]", "FontSize", 30)
-title("Door Angular Velocity Over Time", "FontSize", 36)
+ylabel("Door velocity [m/s]", "FontSize", 30)
+title("Door Velocity Over Time", "FontSize", 36)
 legend("Left door", "Right door", "Location", "best", "FontSize", 30)
 set(gca, "FontSize", 25)
 
 % Figure 4 - Base joint rotation components (Left and Right)
 figure("Name", "Base joint rotation components")
-plot(t, joint_x_sx, "LineWidth", 1.5)
+plot(t, joint_x_sx, "LineWidth", 3.0)
 hold on
-plot(t, joint_y_sx, "LineWidth", 1.5)
-plot(t, joint_z_sx, "LineWidth", 1.5)
-plot(t, joint_x_dx, "--", "LineWidth", 1.5)
-plot(t, joint_y_dx, "--", "LineWidth", 1.5)
-plot(t, joint_z_dx, "--", "LineWidth", 1.5)
+plot(t, joint_y_sx, "LineWidth", 3.0)
+plot(t, joint_z_sx, "LineWidth", 3.0)
+plot(t, joint_x_dx, "LineWidth", 3.0)
+plot(t, joint_y_dx, "LineWidth", 3.0)
+plot(t, joint_z_dx, "LineWidth", 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
 ylabel("Rotation [deg]", "FontSize", 30)

@@ -24,7 +24,7 @@ joint_z = rad2deg(joint_angles(:, 3));
 
 % Figure 1 - Door opening angle
 figure("Name", "Door opening angle")
-plot(t, door_angle, "LineWidth", 1.5)
+plot(t, door_angle, "LineWidth", 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
 ylabel("Door angle [deg]", "FontSize", 30)
@@ -34,7 +34,7 @@ set(gca, "FontSize", 25)
 
 % Figure 2 - Cylinder extension
 figure("Name", "Cylinder extension")
-plot(t, cylinder_extension, "LineWidth", 1.5)
+plot(t, cylinder_extension, "LineWidth", 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
 ylabel("Cylinder extension [m]", "FontSize", 30)
@@ -44,7 +44,7 @@ set(gca, "FontSize", 25)
 
 % Figure 3 - Door angular velocity
 figure("Name", "Door angular velocity")
-plot(t, door_velocity, "LineWidth", 1.5)
+plot(t, door_velocity, "LineWidth", 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
 ylabel("Door angular velocity [deg/s]", "FontSize", 30)
@@ -54,10 +54,10 @@ set(gca, "FontSize", 25)
 
 % Figure 4 - Base joint rotation components
 figure("Name", "Base joint rotation components")
-plot(t, joint_x, "LineWidth", 1.5)
+plot(t, joint_x, "LineWidth", 3.0)
 hold on
-plot(t, joint_y, "LineWidth", 1.5)
-plot(t, joint_z, "LineWidth", 1.5)
+plot(t, joint_y, "LineWidth", 3.0)
+plot(t, joint_z, "LineWidth", 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
 ylabel("Rotation [deg]", "FontSize", 30)

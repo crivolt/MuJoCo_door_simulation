@@ -24,21 +24,21 @@ align_rot_dx = data.rotazione_allineamento_dx_deg(:);
 
 % Figure 1 - Door position
 figure("Name", "Door position")
-plot(t, door_pos_sx, "LineWidth", 1.5)
+plot(t, door_pos_sx, "LineWidth", 3.0)
 hold on
-plot(t, door_pos_dx, "LineWidth", 1.5)
+plot(t, door_pos_dx, "LineWidth", 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
-ylabel("Door displacement [m]", "FontSize", 30)
-title("Door Position Over Time", "FontSize", 36)
+ylabel("Door position [m]", "FontSize", 30)
+title("Door Opening Over Time", "FontSize", 36)
 legend("Door SX", "Door DX", "Location", "best", "FontSize", 30)
 set(gca, "FontSize", 25)
 
 % Figure 2 - Door velocity
 figure("Name", "Door velocity")
-plot(t, door_vel_sx, "LineWidth", 1.5)
+plot(t, door_vel_sx, "LineWidth", 3.0)
 hold on
-plot(t, door_vel_dx, "LineWidth", 1.5)
+plot(t, door_vel_dx, "LineWidth", 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
 ylabel("Door velocity [m/s]", "FontSize", 30)
@@ -48,9 +48,9 @@ set(gca, "FontSize", 25)
 
 % Figure 3 - Linear actuator position
 figure("Name", "Linear actuator position")
-plot(t, act_pos_sx, "LineWidth", 1.5)
+plot(t, act_pos_sx, "LineWidth", 3.0)
 hold on
-plot(t, act_pos_dx, "LineWidth", 1.5)
+plot(t, act_pos_dx, "LineWidth", 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
 ylabel("Actuator displacement [m]", "FontSize", 30)
@@ -60,9 +60,9 @@ set(gca, "FontSize", 25)
 
 % Figure 4 - Linear actuator velocity
 figure("Name", "Linear actuator velocity")
-plot(t, act_vel_sx, "LineWidth", 1.5)
+plot(t, act_vel_sx, "LineWidth", 3.0)
 hold on
-plot(t, act_vel_dx, "LineWidth", 1.5)
+plot(t, act_vel_dx, "LineWidth", 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
 ylabel("Actuator velocity [m/s]", "FontSize", 30)
@@ -72,9 +72,9 @@ set(gca, "FontSize", 25)
 
 % Figure 5 - Alignment joint rotation
 figure("Name", "Alignment joint rotation")
-plot(t, align_rot_sx, "LineWidth", 1.5)
+plot(t, align_rot_sx, "LineWidth", 3.0)
 hold on
-plot(t, align_rot_dx, "LineWidth", 1.5)
+plot(t, align_rot_dx, "LineWidth", 3.0)
 grid on
 xlabel("Time [s]", "FontSize", 30)
 ylabel("Rotation [deg]", "FontSize", 30)
