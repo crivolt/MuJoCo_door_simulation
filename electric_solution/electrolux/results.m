@@ -8,26 +8,24 @@ door_vel = data.velocita_porta(:);
 motor_pos = data.posizione_motoriduttore(:);
 comp_radial = data.correzione_allineamento_radiale_mm(:);
 align_rot = data.rotazione_allineamento_deg(:);
+torque = data.coppia_motoriduttore(:);
+power = data.potenza_meccanica(:);
 
 % Figure 1 - Door position
 figure("Name", "Door position")
 plot(t, door_pos, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Door angle [deg]", "FontSize", 30)
-title("Door Opening Angle Over Time", "FontSize", 36)
-legend("Door", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Door angle [deg]", "FontSize", 40)
+set(gca, "FontSize", 30)
 
 % Figure 2 - Door velocity
 figure("Name", "Door velocity")
 plot(t, door_vel, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Door angular velocity [deg/s]", "FontSize", 30)
-title("Door Angular Velocity Over Time", "FontSize", 36)
-legend("Door", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Door angular velocity [deg/s]", "FontSize", 40)
+set(gca, "FontSize", 30)
 
 % Figure 3 - Gearmotor position
 figure("Name", "Gearmotor position")
@@ -39,17 +37,61 @@ title("Gearmotor Position Over Time", "FontSize", 36)
 legend("Motor", "Location", "best", "FontSize", 30)
 set(gca, "FontSize", 25)
 
-% Figure 4 - Alignment corrections
-figure("Name", "Alignment corrections")
+% Figure 4 - Radial alignment correction
+
+figure("Name", "Radial alignment correction")
+
 plot(t, comp_radial, "LineWidth", 3.0)
-hold on
-plot(t, align_rot, "LineWidth", 3.0)
+
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Correction", "FontSize", 30)
-title("Alignment Corrections Over Time", "FontSize", 36)
-legend("Radial correction [mm]", "Rotation [deg]", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+
+xlabel("Time [s]", "FontSize", 40)
+
+ylabel("Radial correction [mm]", "FontSize", 40)
+
+set(gca, "FontSize", 30)
+
+% Figure 5 - Alignment joint rotation
+
+figure("Name", "Alignment joint rotation")
+
+plot(t, align_rot, "LineWidth", 3.0)
+
+grid on
+
+xlabel("Time [s]", "FontSize", 40)
+
+ylabel("Rotation [deg]", "FontSize", 40)
+
+set(gca, "FontSize", 30)
+
+% Figure 6 - Motor actuation torque
+
+figure("Name", "Motor actuation torque")
+
+plot(t, torque, "LineWidth", 3.0)
+
+grid on
+
+xlabel("Time [s]", "FontSize", 40)
+
+ylabel("Motor torque [Nm]", "FontSize", 40)
+
+set(gca, "FontSize", 30)
+
+% Figure 7 - Mechanical actuation power
+
+figure("Name", "Mechanical actuation power")
+
+plot(t, power, "LineWidth", 3.0)
+
+grid on
+
+xlabel("Time [s]", "FontSize", 40)
+
+ylabel("Mechanical power [W]", "FontSize", 40)
+
+set(gca, "FontSize", 30)
 
 % Figure 5 - Complete overview
 figure("Name", "Complete overview")

@@ -3,7 +3,7 @@ clc
 close all
 
 % Load data
-data = load("/Users/cristianvoltan/Desktop/unipd/tirocinio/CAD/electric_solution/osaka/dati_porta_lineare_athen_xl.mat");
+data = load("/Users/cristianvoltan/Desktop/unipd/tirocinio/CAD/electric_solution/osaka/dati_porta_lineare_osaka.mat");
 
 t = data.tempo(:);
 
@@ -13,6 +13,8 @@ door_vel_sx = data.velocita_porta_sx_m_s(:);
 act_pos_sx = data.posizione_attuatore_lineare_sx_m(:);
 act_vel_sx = data.velocita_attuatore_lineare_sx_m_s(:);
 align_rot_sx = data.rotazione_allineamento_sx_deg(:);
+force_sx = data.forza_attuatore_sx(:);
+power_sx = data.potenza_meccanica_sx(:);
 
 % Porta destra
 door_pos_dx = data.posizione_porta_dx_m(:);
@@ -20,6 +22,9 @@ door_vel_dx = data.velocita_porta_dx_m_s(:);
 act_pos_dx = data.posizione_attuatore_lineare_dx_m(:);
 act_vel_dx = data.velocita_attuatore_lineare_dx_m_s(:);
 align_rot_dx = data.rotazione_allineamento_dx_deg(:);
+force_dx = data.forza_attuatore_dx(:);
+power_dx = data.potenza_meccanica_dx(:);
+
 
 
 % Figure 1 - Door position
@@ -28,11 +33,10 @@ plot(t, door_pos_sx, "LineWidth", 3.0)
 hold on
 plot(t, door_pos_dx, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Door position [m]", "FontSize", 30)
-title("Door Opening Over Time", "FontSize", 36)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Door position [m]", "FontSize", 40)
 legend("Door SX", "Door DX", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
 
 % Figure 2 - Door velocity
 figure("Name", "Door velocity")
@@ -40,11 +44,10 @@ plot(t, door_vel_sx, "LineWidth", 3.0)
 hold on
 plot(t, door_vel_dx, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Door velocity [m/s]", "FontSize", 30)
-title("Door Velocity Over Time", "FontSize", 36)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Door velocity [m/s]", "FontSize", 40)
 legend("Door SX", "Door DX", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
 
 % Figure 3 - Linear actuator position
 figure("Name", "Linear actuator position")
@@ -52,11 +55,11 @@ plot(t, act_pos_sx, "LineWidth", 3.0)
 hold on
 plot(t, act_pos_dx, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Actuator displacement [m]", "FontSize", 30)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Actuator displacement [m]", "FontSize", 40)
 title("Linear Actuator Position Over Time", "FontSize", 36)
 legend("Actuator SX", "Actuator DX", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
 
 % Figure 4 - Linear actuator velocity
 figure("Name", "Linear actuator velocity")
@@ -64,11 +67,10 @@ plot(t, act_vel_sx, "LineWidth", 3.0)
 hold on
 plot(t, act_vel_dx, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Actuator velocity [m/s]", "FontSize", 30)
-title("Linear Actuator Velocity Over Time", "FontSize", 36)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Actuator velocity [m/s]", "FontSize", 40)
 legend("Actuator SX", "Actuator DX", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
 
 % Figure 5 - Alignment joint rotation
 figure("Name", "Alignment joint rotation")
@@ -76,11 +78,34 @@ plot(t, align_rot_sx, "LineWidth", 3.0)
 hold on
 plot(t, align_rot_dx, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Rotation [deg]", "FontSize", 30)
-title("Alignment Joint Rotation Over Time", "FontSize", 36)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Rotation [deg]", "FontSize", 40)
 legend("Alignment SX", "Alignment DX", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
+
+% Figure 6 - Linear actuator force
+
+figure("Name", "Linear actuator force")
+plot(t, force_sx, "LineWidth", 3.0)
+hold on
+plot(t, force_dx, "LineWidth", 3.0)
+grid on
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Actuator force [N]", "FontSize", 40)
+legend("Actuator SX", "Actuator DX", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 30)
+
+% Figure 7 - Mechanical actuation power
+
+figure("Name", "Mechanical actuation power")
+plot(t, power_sx, "LineWidth", 3.0)
+hold on
+plot(t, power_dx, "LineWidth", 3.0)
+grid on
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Mechanical power [W]", "FontSize", 40)
+legend("Actuator SX", "Actuator DX", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 30)
 
 
 % Figure 6 - Complete overview

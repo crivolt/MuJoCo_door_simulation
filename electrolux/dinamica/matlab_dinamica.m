@@ -25,10 +25,9 @@ redLine   = [0.85 0 0];  % limiti J4-J6 (rosso)
 figure("Name", "Door opening angle")
 plot(tempo, apertura, 'LineWidth', 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Door angle [deg]", "FontSize", 30)
-title("Door Opening Angle Over Time", "FontSize", 36)
-set(gca, "FontSize", 25)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Door angle [deg]", "FontSize", 40)
+set(gca, "FontSize", 30)
 
 % ══════════════════════════════
 % FIGURE 2 - ANGULAR VELOCITY
@@ -36,10 +35,9 @@ set(gca, "FontSize", 25)
 figure("Name", "Door angular velocity")
 plot(tempo, velocita, 'LineWidth', 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Door angular velocity [deg/s]", "FontSize", 30)
-title("Door Angular Velocity Over Time", "FontSize", 36)
-set(gca, "FontSize", 25)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Door angular velocity [deg/s]", "FontSize", 40)
+set(gca, "FontSize", 30)
 
 % ══════════════════════════════
 % FIGURE 3 - JOINT TORQUES
@@ -65,14 +63,13 @@ for i = 1:6
     yline(-limits(i), '--', 'Color', limColor, 'LineWidth', 2.0)
 end
 
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Joint torque [Nm]", "FontSize", 30)
-title("Joint Torques", "FontSize", 36)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Joint torque [Nm]", "FontSize", 40)
 legend("J1","J2","J3","J4","J5","J6", "Location", "best", "FontSize", 30)
 grid on
 xlim([min(tempo), max(tempo)])
 ylim([-335 335])
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
 
 % load("/Users/cristianvoltan/Desktop/unipd/tirocinio/CAD/electrolux/dinamica/dati_porta_franka.mat")
 % 

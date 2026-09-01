@@ -118,6 +118,12 @@ log_act_dx_m = []
 log_act_dx_vel_m_s = []
 log_align_dx_deg = []
 
+log_force_sx = []
+log_force_dx = []
+
+log_power_sx = []
+log_power_dx = []
+
 
 def test_actuator_to_door_direction(motor_actuator_id, door_qposadr, test_force):
     test_data = mujoco.MjData(model)
@@ -186,6 +192,9 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         door_dx_pos = data.qpos[door_dx_qposadr]
         door_dx_vel = data.qvel[door_dx_dofadr]
+
+        motor_ctrl_sx = 0.0
+        motor_ctrl_dx = 0.0
 
         # PHASE 0: OPEN LEFT DOOR
         if phase == OPEN_SX:
@@ -344,6 +353,16 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         viewer.sync()
         time.sleep(model.opt.timestep)
 
+        # ACTUATOR FORCE AND POWER
+        actuator_force_sx = data.qfrc_actuator[act_sx_dofadr]
+        actuator_force_dx = data.qfrc_actuator[act_dx_dofadr]
+
+        actuator_vel_sx = data.qvel[act_sx_dofadr]
+        actuator_vel_dx = data.qvel[act_dx_dofadr]
+
+        power_sx = actuator_force_sx * actuator_vel_sx
+        power_dx = actuator_force_dx * actuator_vel_dx
+
         # LOGGING
         log_time.append(data.time)
 
@@ -358,6 +377,12 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         log_act_dx_m.append(data.qpos[act_dx_qposadr])
         log_act_dx_vel_m_s.append(data.qvel[act_dx_dofadr])
         log_align_dx_deg.append(quat_angle_deg(data.qpos[align_dx_qposadr:align_dx_qposadr + 4]))
+
+        log_force_sx.append(actuator_force_sx)
+        log_force_dx.append(actuator_force_dx)
+
+        log_power_sx.append(power_sx)
+        log_power_dx.append(power_dx)
 
         # PRINT DIAGNOSTICS
         if len(log_time) % 50 == 0:
@@ -379,8 +404,6 @@ door_dx_pos_mm = data.qpos[door_dx_qposadr] * 1000.0
 print(f"Final door SX position: {door_sx_pos_mm:.2f} mm")
 print(f"Final door DX position: {door_dx_pos_mm:.2f} mm")
 
-
-# SAVE DATA
 scipy.io.savemat("dati_porta_lineare_athen_xl.mat", {
     "tempo": np.array(log_time),
 
@@ -389,12 +412,16 @@ scipy.io.savemat("dati_porta_lineare_athen_xl.mat", {
     "posizione_attuatore_lineare_sx_m": np.array(log_act_sx_m),
     "velocita_attuatore_lineare_sx_m_s": np.array(log_act_sx_vel_m_s),
     "rotazione_allineamento_sx_deg": np.array(log_align_sx_deg),
+    "forza_attuatore_sx": np.array(log_force_sx),
+    "potenza_meccanica_sx": np.array(log_power_sx),
 
     "posizione_porta_dx_m": np.array(log_door_dx_m),
     "velocita_porta_dx_m_s": np.array(log_door_dx_vel_m_s),
     "posizione_attuatore_lineare_dx_m": np.array(log_act_dx_m),
     "velocita_attuatore_lineare_dx_m_s": np.array(log_act_dx_vel_m_s),
     "rotazione_allineamento_dx_deg": np.array(log_align_dx_deg),
+    "forza_attuatore_dx": np.array(log_force_dx),
+    "potenza_meccanica_dx": np.array(log_power_dx),
 })
 
 print("Dati salvati in: dati_porta_lineare_athen_xl.mat")

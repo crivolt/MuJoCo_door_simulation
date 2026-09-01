@@ -16,6 +16,15 @@ vel_dx = data.velocita_porta_dx(:);
 cyl_sx = data.posizione_cilindro_sx(:);
 cyl_dx = data.posizione_cilindro_dx(:);
 
+force_sx = data.forza_sx(:);
+force_dx = data.forza_dx(:);
+
+cyl_vel_sx = gradient(cyl_sx, t);
+cyl_vel_dx = gradient(cyl_dx, t);
+
+power_sx = force_sx .* cyl_vel_sx;
+power_dx = force_dx .* cyl_vel_dx;
+
 quat_sx = data.quat_snodo_stelo_staffa_sx;
 quat_dx = data.quat_snodo_stelo_staffa_dx;
 
@@ -38,11 +47,10 @@ plot(t, door_sx, "LineWidth", 3.0)
 hold on
 plot(t, door_dx, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Door Position [m]", "FontSize", 30)
-title("Door Opening Over Time", "FontSize", 36)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Door Position [m]", "FontSize", 40)
 legend("Left door", "Right door", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
 
 % Figure 2 - Cylinder extension
 figure("Name", "Cylinder extension")
@@ -50,11 +58,10 @@ plot(t, cyl_sx, "LineWidth", 1.5)
 hold on
 plot(t, cyl_dx, "LineWidth", 1.5)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Cylinder extension [m]", "FontSize", 30)
-title("Cylinder Extension Over Time", "FontSize", 36)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Cylinder extension [m]", "FontSize", 40)
 legend("Left cylinder", "Right cylinder", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
 
 % Figure 3 - Door angular velocity
 figure("Name", "Door velocity")
@@ -62,11 +69,10 @@ plot(t, vel_sx, "LineWidth", 3.0)
 hold on
 plot(t, vel_dx, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Door velocity [m/s]", "FontSize", 30)
-title("Door Velocity Over Time", "FontSize", 36)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Door velocity [m/s]", "FontSize", 40)
 legend("Left door", "Right door", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
 
 % Figure 4 - Base joint rotation components (Left and Right)
 figure("Name", "Base joint rotation components")
@@ -78,11 +84,30 @@ plot(t, joint_x_dx, "LineWidth", 3.0)
 plot(t, joint_y_dx, "LineWidth", 3.0)
 plot(t, joint_z_dx, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Rotation [deg]", "FontSize", 30)
-title("End-effector Joint Rotation Components (Left vs Right)", "FontSize", 36)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Rotation [deg]", "FontSize", 40)
 legend("X - Left", "Y - Left", "Z - Left", "X - Right", "Y - Right", "Z - Right", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
+
+figure("Name", "Pneumatic actuator force")
+plot(t, force_sx, "LineWidth", 3.0)
+hold on
+plot(t, force_dx, "LineWidth", 3.0)
+grid on
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Actuator force [N]", "FontSize", 40)
+legend("Left cylinder", "Right cylinder", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 30)
+
+figure("Name", "Mechanical actuation power")
+plot(t, power_sx, "LineWidth", 3.0)
+hold on
+plot(t, power_dx, "LineWidth", 3.0)
+grid on
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Mechanical power [W]", "FontSize", 40)
+legend("Left cylinder", "Right cylinder", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 30)
 
 
 % Figure 6 - Complete overview

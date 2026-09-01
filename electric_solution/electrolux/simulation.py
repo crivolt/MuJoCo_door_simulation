@@ -85,6 +85,7 @@ log_motor_torque_cmd = []
 log_motor_torque_real = []
 log_comp_radiale_mm = []
 log_align_deg = []
+log_motor_power = []
 
 
 def quat_angle_deg(quat):
@@ -216,11 +217,20 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         viewer.sync()
         time.sleep(model.opt.timestep)
 
+        # MOTOR TORQUE AND POWER
+        motor_vel_rad = data.qvel[motor_dofadr]
+        motor_torque_real = data.qfrc_actuator[motor_dofadr]
+        motor_power = motor_torque_real * motor_vel_rad
+
         # LOGGING
         log_time.append(data.time)
         log_door_deg.append(np.rad2deg(data.qpos[door_qposadr]))
         log_door_vel_deg.append(np.rad2deg(data.qvel[door_dofadr]))
         log_motor_deg.append(np.rad2deg(data.qpos[motor_qposadr]))
+        log_motor_vel_deg.append(np.rad2deg(data.qvel[motor_dofadr]))
+        log_motor_torque_cmd.append(motor_ctrl)
+        log_motor_torque_real.append(motor_torque_real)
+        log_motor_power.append(motor_power)
         log_comp_radiale_mm.append(data.qpos[comp_radiale_qposadr] * 1000.0)
         log_align_deg.append(quat_angle_deg(data.qpos[align_qposadr:align_qposadr + 4]))
 
@@ -240,12 +250,15 @@ door_angle_deg = np.rad2deg(data.qpos[door_qposadr])
 print(f"Final door angle: {door_angle_deg:.2f} deg")
 
 
-# SAVE DATA
 scipy.io.savemat("dati_porta_meccanica_electrolux.mat", {
     "tempo": np.array(log_time),
     "posizione_porta": np.array(log_door_deg),
     "velocita_porta": np.array(log_door_vel_deg),
     "posizione_motoriduttore": np.array(log_motor_deg),
+    "velocita_motoriduttore": np.array(log_motor_vel_deg),
     "correzione_allineamento_radiale_mm": np.array(log_comp_radiale_mm),
     "rotazione_allineamento_deg": np.array(log_align_deg),
+    "coppia_motoriduttore_cmd": np.array(log_motor_torque_cmd),
+    "coppia_motoriduttore": np.array(log_motor_torque_real),
+    "potenza_meccanica": np.array(log_motor_power),
 })

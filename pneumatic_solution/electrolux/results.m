@@ -10,8 +10,15 @@ t = data.tempo(:);
 door_angle = data.apertura(:);
 door_velocity = data.velocita(:);
 cylinder_extension = data.posizione_cilindro(:);
+force = data.forza(:);
 
 quat_base = data.quat_snodo_base;
+
+% Cylinder linear velocity [m/s]
+cylinder_velocity = gradient(cylinder_extension, t);
+
+% Mechanical actuation power [W]
+power = force .* cylinder_velocity;
 
 % Convert base joint quaternion to rotations about X, Y, Z
 joint_angles = quat_to_euler_xyz(quat_base);
@@ -21,16 +28,13 @@ joint_y = rad2deg(joint_angles(:, 2));
 joint_z = rad2deg(joint_angles(:, 3));
 
 
-
 % Figure 1 - Door opening angle
 figure("Name", "Door opening angle")
 plot(t, door_angle, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Door angle [deg]", "FontSize", 30)
-title("Door Opening Angle Over Time", "FontSize", 36)
-legend("Door", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Door angle [deg]", "FontSize", 40)
+set(gca, "FontSize", 30)
 
 % Figure 2 - Cylinder extension
 figure("Name", "Cylinder extension")
@@ -46,11 +50,9 @@ set(gca, "FontSize", 25)
 figure("Name", "Door angular velocity")
 plot(t, door_velocity, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Door angular velocity [deg/s]", "FontSize", 30)
-title("Door Angular Velocity Over Time", "FontSize", 36)
-legend("Door", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Door angular velocity [deg/s]", "FontSize", 40)
+set(gca, "FontSize", 30)
 
 % Figure 4 - Base joint rotation components
 figure("Name", "Base joint rotation components")
@@ -59,14 +61,29 @@ hold on
 plot(t, joint_y, "LineWidth", 3.0)
 plot(t, joint_z, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Rotation [deg]", "FontSize", 30)
-title("Base Joint Rotation Components", "FontSize", 36)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Rotation [deg]", "FontSize", 40)
 legend("Rotation about X", "Rotation about Y", "Rotation about Z", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
+
+% Figure 5 - Pneumatic actuator force
+figure("Name", "Pneumatic actuator force")
+plot(t, force, "LineWidth", 3.0)
+grid on
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Actuator force [N]", "FontSize", 40)
+set(gca, "FontSize", 30)
+
+% Figure 6 - Mechanical actuation power
+figure("Name", "Mechanical actuation power")
+plot(t, power, "LineWidth", 3.0)
+grid on
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Mechanical power [W]", "FontSize", 40)
+set(gca, "FontSize", 30)
 
 
-% Figure 5 - Complete overview
+% Figure 7 - Complete overview
 figure("Name", "Complete overview")
 tiledlayout(4, 1)
 

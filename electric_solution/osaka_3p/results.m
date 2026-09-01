@@ -3,7 +3,7 @@ clc
 close all
 
 % Load data
-data = load("/Users/cristianvoltan/Desktop/unipd/tirocinio/CAD/electric_solution/osaka_3p/dati_porta_meccanica_astana_p.mat");
+data = load("/Users/cristianvoltan/Desktop/unipd/tirocinio/CAD/electric_solution/osaka_3p/dati_porta_elettromeccanica_osaka_3p.mat");
 
 t = data.tempo(:);
 
@@ -13,6 +13,8 @@ door_vel_sx = data.velocita_porta_sx(:);
 motor_pos_sx = data.posizione_motoriduttore_sx(:);
 comp_radial_sx = data.correzione_allineamento_radiale_sx_mm(:);
 align_rot_sx = data.rotazione_allineamento_sx_deg(:);
+torque_sx = data.coppia_motoriduttore_sx(:);
+power_sx = data.potenza_meccanica_sx(:);
 
 % Porta destra
 door_pos_dx = data.posizione_porta_dx(:);
@@ -20,6 +22,8 @@ door_vel_dx = data.velocita_porta_dx(:);
 motor_pos_dx = data.posizione_motoriduttore_dx(:);
 comp_radial_dx = data.correzione_allineamento_radiale_dx_mm(:);
 align_rot_dx = data.rotazione_allineamento_dx_deg(:);
+torque_dx = data.coppia_motoriduttore_dx(:);
+power_dx = data.potenza_meccanica_dx(:);
 
 
 % Figure 1 - Door position
@@ -28,11 +32,10 @@ plot(t, door_pos_sx, "LineWidth", 3.0)
 hold on
 plot(t, door_pos_dx, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Door angle [deg]", "FontSize", 30)
-title("Door Opening Angle Over Time", "FontSize", 36)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Door angle [deg]", "FontSize", 40)
 legend("Door SX", "Door DX", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
 
 % Figure 2 - Door velocity
 figure("Name", "Door velocity")
@@ -40,11 +43,10 @@ plot(t, door_vel_sx, "LineWidth", 3.0)
 hold on
 plot(t, door_vel_dx, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Door angular velocity [deg/s]", "FontSize", 30)
-title("Door Angular Velocity Over Time", "FontSize", 36)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Door angular velocity [deg/s]", "FontSize", 40)
 legend("Door SX", "Door DX", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
 
 % Figure 3 - Gearmotor position
 figure("Name", "Gearmotor position")
@@ -64,11 +66,10 @@ plot(t, comp_radial_sx, "LineWidth", 3.0)
 hold on
 plot(t, comp_radial_dx, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Radial correction [mm]", "FontSize", 30)
-title("Radial Alignment Correction Over Time", "FontSize", 36)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Radial correction [mm]", "FontSize", 400)
 legend("Radial correction SX", "Radial correction DX", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
 
 % Figure 5 - Alignment joint rotation
 figure("Name", "Alignment joint rotation")
@@ -76,11 +77,34 @@ plot(t, align_rot_sx, "LineWidth", 3.0)
 hold on
 plot(t, align_rot_dx, "LineWidth", 3.0)
 grid on
-xlabel("Time [s]", "FontSize", 30)
-ylabel("Rotation [deg]", "FontSize", 30)
-title("Alignment Joint Rotation Over Time", "FontSize", 36)
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Rotation [deg]", "FontSize", 40)
 legend("Alignment SX", "Alignment DX", "Location", "best", "FontSize", 30)
-set(gca, "FontSize", 25)
+set(gca, "FontSize", 30)
+
+% Figure 6 - Motor actuation torque
+
+figure("Name", "Motor actuation torque")
+plot(t, torque_sx, "LineWidth", 3.0)
+hold on
+plot(t, torque_dx, "LineWidth", 3.0)
+grid on
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Motor torque [Nm]", "FontSize", 40)
+legend("Motor SX", "Motor DX", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 30)
+
+% Figure 7 - Mechanical actuation power
+
+figure("Name", "Mechanical actuation power")
+plot(t, power_sx, "LineWidth", 3.0)
+hold on
+plot(t, power_dx, "LineWidth", 3.0)
+grid on
+xlabel("Time [s]", "FontSize", 40)
+ylabel("Mechanical power [W]", "FontSize", 40)
+legend("Motor SX", "Motor DX", "Location", "best", "FontSize", 30)
+set(gca, "FontSize", 30)
 
 
 % Figure 6 - Complete overview

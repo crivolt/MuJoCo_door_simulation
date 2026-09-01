@@ -109,6 +109,7 @@ phase_start_angle_dx = data.qpos[door_dx_qposadr]
 
 
 # LOGGING
+# LOGGING
 log_time = []
 
 log_door_sx_deg = []
@@ -122,6 +123,16 @@ log_door_dx_vel_deg = []
 log_motor_dx_deg = []
 log_comp_dx_mm = []
 log_align_dx_deg = []
+
+# Motor torque and power
+log_motor_sx_vel = []
+log_motor_dx_vel = []
+
+log_torque_sx = []
+log_torque_dx = []
+
+log_power_sx = []
+log_power_dx = []
 
 
 def test_motor_to_door_direction(motor_actuator_id, door_qposadr, test_torque):
@@ -193,6 +204,10 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         door_dx_angle = data.qpos[door_dx_qposadr]
         door_dx_vel = data.qvel[door_dx_dofadr]
+
+        # Reset motor commands at each simulation step
+        motor_ctrl_sx = 0.0
+        motor_ctrl_dx = 0.0
 
         # PHASE 0: OPEN LEFT DOOR
         if phase == OPEN_SX:
@@ -351,6 +366,20 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         viewer.sync()
         time.sleep(model.opt.timestep)
 
+        # MOTOR ACTUATION QUANTITIES
+
+        # Motor angular velocities [rad/s]
+        motor_sx_vel = data.qvel[motor_sx_dofadr]
+        motor_dx_vel = data.qvel[motor_dx_dofadr]
+
+        # Actuation torques [Nm]
+        torque_sx = motor_ctrl_sx
+        torque_dx = motor_ctrl_dx
+
+        # Mechanical actuation power [W]
+        power_sx = torque_sx * motor_sx_vel
+        power_dx = torque_dx * motor_dx_vel
+
         # LOGGING
         log_time.append(data.time)
 
@@ -365,6 +394,16 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         log_motor_dx_deg.append(np.rad2deg(data.qpos[motor_dx_qposadr]))
         log_comp_dx_mm.append(data.qpos[comp_dx_qposadr] * 1000.0)
         log_align_dx_deg.append(quat_angle_deg(data.qpos[align_dx_qposadr:align_dx_qposadr + 4]))
+
+        # Motor torque and power logging
+        log_motor_sx_vel.append(motor_sx_vel)
+        log_motor_dx_vel.append(motor_dx_vel)
+
+        log_torque_sx.append(torque_sx)
+        log_torque_dx.append(torque_dx)
+
+        log_power_sx.append(power_sx)
+        log_power_dx.append(power_dx)
 
         # PRINT DIAGNOSTICS
         if len(log_time) % 50 == 0:
@@ -390,7 +429,7 @@ print(f"Final door DX angle: {door_dx_angle_deg:.2f} deg")
 
 
 # SAVE DATA
-scipy.io.savemat("dati_porta_meccanica_astana_p.mat", {
+scipy.io.savemat("dati_porta_elettromeccanica_osaka_3p.mat", {
     "tempo": np.array(log_time),
 
     "posizione_porta_sx": np.array(log_door_sx_deg),
@@ -399,11 +438,19 @@ scipy.io.savemat("dati_porta_meccanica_astana_p.mat", {
     "correzione_allineamento_radiale_sx_mm": np.array(log_comp_sx_mm),
     "rotazione_allineamento_sx_deg": np.array(log_align_sx_deg),
 
+    "velocita_motoriduttore_sx": np.array(log_motor_sx_vel),
+    "coppia_motoriduttore_sx": np.array(log_torque_sx),
+    "potenza_meccanica_sx": np.array(log_power_sx),
+
     "posizione_porta_dx": np.array(log_door_dx_deg),
     "velocita_porta_dx": np.array(log_door_dx_vel_deg),
     "posizione_motoriduttore_dx": np.array(log_motor_dx_deg),
     "correzione_allineamento_radiale_dx_mm": np.array(log_comp_dx_mm),
     "rotazione_allineamento_dx_deg": np.array(log_align_dx_deg),
+
+    "velocita_motoriduttore_dx": np.array(log_motor_dx_vel),
+    "coppia_motoriduttore_dx": np.array(log_torque_dx),
+    "potenza_meccanica_dx": np.array(log_power_dx),
 })
 
-print("Dati salvati in: dati_porta_meccanica_astana_p.mat")
+print("Dati salvati in: dati_porta_elettromeccanica_osaka_3p.mat")

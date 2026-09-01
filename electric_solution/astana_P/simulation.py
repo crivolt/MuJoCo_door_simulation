@@ -122,6 +122,12 @@ log_motor_dx_deg = []
 log_comp_dx_mm = []
 log_align_dx_deg = []
 
+log_torque_sx = []
+log_torque_dx = []
+
+log_power_sx = []
+log_power_dx = []
+
 
 def test_motor_to_door_direction(motor_actuator_id, door_qposadr, test_torque):
     # Applica una coppia di test al motoriduttore e misura come si muove la porta associata
@@ -192,6 +198,9 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
 
         door_dx_angle = data.qpos[door_dx_qposadr]
         door_dx_vel = data.qvel[door_dx_dofadr]
+
+        motor_ctrl_sx = 0.0
+        motor_ctrl_dx = 0.0
 
         # PHASE 0: OPEN LEFT DOOR
         if phase == OPEN_SX:
@@ -350,6 +359,16 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         viewer.sync()
         time.sleep(model.opt.timestep)
 
+        # MOTOR TORQUE AND POWER
+        torque_sx = data.qfrc_actuator[motor_sx_dofadr]
+        torque_dx = data.qfrc_actuator[motor_dx_dofadr]
+
+        motor_vel_sx = data.qvel[motor_sx_dofadr]
+        motor_vel_dx = data.qvel[motor_dx_dofadr]
+
+        power_sx = torque_sx * motor_vel_sx
+        power_dx = torque_dx * motor_vel_dx
+
         # LOGGING
         log_time.append(data.time)
 
@@ -364,6 +383,12 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         log_motor_dx_deg.append(np.rad2deg(data.qpos[motor_dx_qposadr]))
         log_comp_dx_mm.append(data.qpos[comp_dx_qposadr] * 1000.0)
         log_align_dx_deg.append(quat_angle_deg(data.qpos[align_dx_qposadr:align_dx_qposadr + 4]))
+
+        log_torque_sx.append(torque_sx)
+        log_torque_dx.append(torque_dx)
+
+        log_power_sx.append(power_sx)
+        log_power_dx.append(power_dx)
 
         # PRINT DIAGNOSTICS
         if len(log_time) % 50 == 0:
@@ -388,7 +413,6 @@ print(f"Final door SX angle: {door_sx_angle_deg:.2f} deg")
 print(f"Final door DX angle: {door_dx_angle_deg:.2f} deg")
 
 
-# SAVE DATA
 scipy.io.savemat("dati_porta_meccanica_astana_p.mat", {
     "tempo": np.array(log_time),
 
@@ -397,12 +421,16 @@ scipy.io.savemat("dati_porta_meccanica_astana_p.mat", {
     "posizione_motoriduttore_sx": np.array(log_motor_sx_deg),
     "correzione_allineamento_radiale_sx_mm": np.array(log_comp_sx_mm),
     "rotazione_allineamento_sx_deg": np.array(log_align_sx_deg),
+    "coppia_motoriduttore_sx": np.array(log_torque_sx),
+    "potenza_meccanica_sx": np.array(log_power_sx),
 
     "posizione_porta_dx": np.array(log_door_dx_deg),
     "velocita_porta_dx": np.array(log_door_dx_vel_deg),
     "posizione_motoriduttore_dx": np.array(log_motor_dx_deg),
     "correzione_allineamento_radiale_dx_mm": np.array(log_comp_dx_mm),
     "rotazione_allineamento_dx_deg": np.array(log_align_dx_deg),
+    "coppia_motoriduttore_dx": np.array(log_torque_dx),
+    "potenza_meccanica_dx": np.array(log_power_dx),
 })
 
 print("Dati salvati in: dati_porta_meccanica_astana_p.mat")
